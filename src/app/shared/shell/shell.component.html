@@ -1,0 +1,85 @@
+<mat-sidenav-container class="sidenav-container">
+
+    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]=false>
+
+        <mat-toolbar>Menu</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
+            <a mat-list-item routerLink="/login" (click)="drawer.close()">Login</a>
+            <a mat-list-item routerLink="/activity" (click)="drawer.close()">Activity</a>
+            <a mat-list-item routerLink="/connect" (click)="drawer.close()">Connect</a>
+            <a mat-list-item routerLink="/profile" (click)="drawer.close()">Profile</a>
+        </mat-nav-list>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar>
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async ">
+                <mat-icon aria-label="side nav toggle icon">menu</mat-icon>
+            </button>
+
+            <span class="logo" routerLink="/">⚕ Remote Health</span>
+            <span class="fill-space"></span>
+
+
+            <div *ngIf="!(isHandset$ |async)" class="navigationbar">
+                <a mat-button routerLink="/">🏠 Dashboard</a>
+                <button mat-button [matMenuTriggerFor]="activity" aria-label="Example icon-button with a menu">🏃‍♂️ Activity</button>
+                <button mat-button [matMenuTriggerFor]="connect" aria-label="Example icon-button with a menu">🚀 Connect</button>
+                <button mat-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">⚙ Setting</button>
+
+            </div>
+
+            <mat-menu #menu="matMenu">
+                <div>
+                    <a mat-menu-item>🚪 Sign Out</a>
+                </div>
+                <a mat-menu-item>🔑 Login</a>
+
+                <a mat-menu-item routerLink="/profile">
+                    <span>👹 Profile</span>
+                </a>
+
+            </mat-menu>
+
+            <ng-template #login>
+                <a mat-menu-item>🔑 Login</a>
+            </ng-template>
+
+            <!--
+            <div *ngIf="auth.user$ | async as user; else login">
+                <a mat-menu-item (click)="auth.singOut()">Sign Out</a>
+            </div>
+            
+            <ng-template #login>
+                <button class="btn btn-primary" (click)="signIn()">Login</button>
+            </ng-template>
+            -->
+
+
+            <mat-menu #connect="matMenu">
+                <a mat-menu-item routerLink="/findDoc">
+                    <span>👨‍⚕️ Find A Doctor</span>
+                </a>
+                <a mat-menu-item routerLink="/postquestions">
+                    <span>❔ Post A Question</span>
+                </a>
+            </mat-menu>
+
+            <mat-menu #activity="matMenu">
+                <a mat-menu-item routerLink="/findDoc">
+                    <span>🔥 Activity Log</span>
+                </a>
+                <a mat-menu-item routerLink="/postquestions">
+                    <span>📅 Calendar</span>
+                </a>
+            </mat-menu>
+
+        </mat-toolbar>
+
+        <ng-content></ng-content>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
