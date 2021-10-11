@@ -47,7 +47,7 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div>
-                        <button mat-button routerLink="/findDoc" style="width:190px;"> 
+                        <button mat-button routerLink="/login" style="width:190px;"> 
                             <span>🔑 Login</span>
                             </button>
                     </div>
@@ -67,7 +67,7 @@
             <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async ">
                 <mat-icon aria-label="side nav toggle icon">menu</mat-icon>
             </button>
-            <span style="position: absolute; left:45%;">Dashboard</span>
+            <span style="position: absolute; right:5%; font-size: 18pt; font-weight: bold;">{{topNavTitle}}</span>
         </mat-toolbar>
 
         <ng-content></ng-content>

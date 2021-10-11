@@ -7,6 +7,10 @@ const routes: Routes = [
   {path: '',
   component: DashboardComponent
   },
+  {
+    path : 'login',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+  },
   {path: 'activityLog',
    component: ActivityLogComponent
   }
