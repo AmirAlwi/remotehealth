@@ -9,6 +9,9 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./shell.component.scss']
 })
 export class ShellComponent implements OnInit {
+  
+  panelOpenState = false;
+  navigationState = true;
 
   isHandset$: Observable<boolean> = this.bpO.observe([Breakpoints.Handset])
   .pipe(
