@@ -1,7 +1,10 @@
+import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { ActivityLogComponent } from './activity-log/activity-log.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+
+import { DoctorGuard } from './user/doctor.guard';
 
 const routes: Routes = [
   {path: '',
@@ -13,6 +16,11 @@ const routes: Routes = [
   },
   {path: 'activityLog',
    component: ActivityLogComponent
+  },
+  {
+    path: 'patients',
+    component: ManagePatientComponent,
+    canActivate: [DoctorGuard]
   }
 ];
 

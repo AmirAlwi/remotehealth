@@ -18,7 +18,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 
 
 const components = [
-  ShellComponent
+  ShellComponent,
 ]
 
 const modules = [    
