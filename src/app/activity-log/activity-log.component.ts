@@ -5,6 +5,11 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './activity-log.component.html',
   styleUrls: ['./activity-log.component.scss']
 })
-export class ActivityLogComponent{
+export class ActivityLogComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }

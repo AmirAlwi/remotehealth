@@ -3,6 +3,12 @@
     color: rgb(240, 120, 76);
 }
 
+.setting {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
 .sidenav-container {
     height: 100%;
 }
@@ -46,12 +52,6 @@
     width: 1.75em;
     border-radius: 50%;
     margin: 0 10px 5px;
-}
-
-.setting {
-    position: absolute;
-    bottom: 0;
-    width: 262px;
 }
 
 mat-panel-title {

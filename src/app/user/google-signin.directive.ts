@@ -20,24 +20,20 @@ export class GoogleSigninDirective {
 
           this.user$ = this.gAuth.authState.pipe(
           switchMap(user => {
-          if (user) {
-            return this.firestore.doc<User>(`users/${user.uid}`).valueChanges()
+          if (user) {        
+            const data = this.firestore.doc<User>(`users/${user.uid}`).valueChanges();
+            return data;
           } else {
             return of(null as any)
           }
         })
-        )
-   }
+        );
 
-  //  this.gAuth.signInWithPopup(new GoogleAuthProvider())
-  //  .then((credential) => {
-  //    this.updateUserData(credential.user);
-  //    console.log(credential.user?.uid);
-  //  });
+   }
 
   @HostListener('click')
   onclick() {
-    const provider = this.gAuth.signInWithPopup(new GoogleAuthProvider())
+    this.gAuth.signInWithPopup(new GoogleAuthProvider())
     .then((credential) =>{
       this.updateUserData(credential.user);
     });  
@@ -52,6 +48,7 @@ export class GoogleSigninDirective {
         patient: true
       }
     }
+    //localStorage.setItem('currentUid',user.uid);
     return userRef.set(data, { merge: true })  
   }
 

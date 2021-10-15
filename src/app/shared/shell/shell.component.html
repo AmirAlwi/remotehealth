@@ -3,9 +3,11 @@
     <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="'dialog'" [opened]="!(isHandset$ |async)" [mode]="(isHandset$ | async) ? 'over' : 'side'">
 
         <mat-toolbar style="cursor: pointer;" routerLink="/">⚕ Remote Health</mat-toolbar>
+
         <mat-nav-list>
             <a mat-list-item routerLink="/">🏠 Dashboard</a>
-            <a mat-list-item routerLink="/patients">🤒 Manage patient</a>
+
+            <a mat-list-item routerLink="/patients" *ngIf="user?.roles.physician">🤒 Manage patient</a>
             <mat-accordion>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
@@ -74,5 +76,7 @@
         <ng-content></ng-content>
 
     </mat-sidenav-content>
+
+
 
 </mat-sidenav-container>

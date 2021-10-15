@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GoogleSigninDirective } from './google-signin.directive';
-import { observable } from 'rxjs';
 import { tap, map, take } from 'rxjs/operators';
 
 @Injectable({
