@@ -3,8 +3,6 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { GoogleSigninDirective } from './../google-signin.directive';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
-import { DatabaseService } from '../database.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',

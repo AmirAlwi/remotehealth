@@ -1,11 +1,10 @@
+import { UserService } from './../../user/user.service';
 import { GoogleSigninDirective } from './../../user/google-signin.directive';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router, NavigationEnd  } from '@angular/router';
-import { DatabaseService } from 'src/app/user/database.service';
-
 @Component({
   selector: 'app-shell',
   templateUrl: './shell.component.html',
@@ -23,7 +22,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     shareReplay()
   );
 
-  constructor(private bpO : BreakpointObserver,  private router:  Router, public auth : GoogleSigninDirective, public db : DatabaseService) {
+  constructor(private bpO : BreakpointObserver,  private router:  Router, public auth : GoogleSigninDirective, public db : UserService) {
     router.events.subscribe( (event) => ( event instanceof NavigationEnd ) && this.handleRouteChange() )
    }
 
@@ -31,7 +30,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    handleRouteChange = () => {
     if (this.router.url.includes('login')) {
      this.topNavTitle = "Login"
-    }else if (this.router.url.includes('activityLog')) {
+    }else if (this.router.url.includes('activity')) {
       this.topNavTitle = "Activity Log"
     } else {
       this.topNavTitle = "Dashboard"

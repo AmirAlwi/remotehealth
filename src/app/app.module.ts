@@ -13,14 +13,12 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { ManagePatientComponent } from './manage-patient/manage-patient.component';
-import { ActivityLogComponent } from './activity-log/activity-log.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    ManagePatientComponent,
-    ActivityLogComponent,
+    ManagePatientComponent
   ],
   imports: [
     BrowserModule,
