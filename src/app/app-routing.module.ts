@@ -1,5 +1,3 @@
-import { ActivityLogComponent } from './activity-log/activity-log.component';
-
 import { UserGuard } from './user/user.guard';
 import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { NgModule, Component } from '@angular/core';
@@ -19,8 +17,8 @@ const routes: Routes = [
   },
   {
     path: 'activity',
-    loadChildren: () => import('./activity-log/activity-log.module').then(m => m.ActivityLogModule),
-
+    loadChildren: () => import('./activity/activity.module').then(m => m.ActivityLogModule),
+    canActivate: [ UserGuard]
   },
   {
     path: 'patients',

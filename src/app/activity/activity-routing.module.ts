@@ -1,11 +1,11 @@
-import { ActivityLogComponent } from './activity-log.component';
+import { ActivityListPageComponent } from './activity-list-page/activity-list-page.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path :  '',
-    component : ActivityLogComponent
+    path :  'activityLog',
+    component : ActivityListPageComponent
   }
 
 ];
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ActivityLogRoutingModule { }
+export class ActivityRoutingModule { }

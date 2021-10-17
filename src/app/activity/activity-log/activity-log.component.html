@@ -1,0 +1,13 @@
+<mat-card [ngClass]="status ? 'highlight' : 'none'" (click)="toggle()">
+    <mat-card-header>
+        <mat-card-title>
+            {{board.title}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{board.notes}}
+        </mat-card-subtitle>
+    </mat-card-header>
+    <button mat-stroked-button>
+            <mat-icon>add</mat-icon>
+          </button>
+</mat-card>

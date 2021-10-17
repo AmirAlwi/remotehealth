@@ -1,6 +1,7 @@
 export interface activity{
+    id?: string;
     title? : string;
-    date? : number;
+    note? : string;
     time? : time;
     sensor? : number[];
     sensordata? : sensordata;

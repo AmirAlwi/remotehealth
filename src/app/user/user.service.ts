@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, first } from 'rxjs/operators';
 import { User } from './login-page/user';
 
 @Injectable({
@@ -11,7 +11,10 @@ export class UserService {
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) { }
 
+
+
   getRole(){
+
     return this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
