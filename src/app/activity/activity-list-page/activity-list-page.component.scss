@@ -1,11 +1,15 @@
-.masterPage {
-    padding: 30px;
-    max-height: 90%;
-    min-height: 50%;
+.logBoard {
+    margin: 30px;
+    border-radius: 10px;
     max-width: 30%;
+    min-width: 30%;
+    max-height: 88%;
+    min-height: 88%;
+    background-color: #fa8142;
+    float: left;
     display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
+    flex-direction: column;
+    overflow-y: scroll;
     &::-webkit-scrollbar {
         height: 4px;
         width: 4px
@@ -22,4 +26,68 @@
         background-color: #f5f5f5;
         border: 2px solid #555555;
     }
+}
+
+.logDetails {
+    margin-top: 30px;
+    margin-right: 30px;
+    margin-left: 33%;
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 85%;
+    min-height: 85%;
+    background-color: rgb(95, 91, 91);
+}
+
+.log-content {
+    //border-radius: 10px;
+    border: 2px solid white;
+    min-height: inherit;
+    max-height: inherit;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    // float: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.titleBoard {
+    padding-top: 30px;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+    min-width: 25%;
+    max-width: 30%;
+    float: left;
+    max-height: 60px;
+}
+
+.contentTitle {
+    font-size: 25pt;
+    letter-spacing: 1pt;
+    line-height: 0;
+}
+
+.date {
+    line-height: 2em;
+    font-size: 13pt;
+    color: #16dfd5;
+}
+
+.Desp {
+    margin-left: 15px;
+    display: inline-block;
+    min-width: 25%;
+    max-width: 30%;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+.mid-header {
+    font-style: bold;
+}
+
+.feel {
+    margin-left: 15px;
+    display: inline-block;
 }
