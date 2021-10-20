@@ -1,0 +1,28 @@
+<div class="logBoard">
+
+    <app-activity-log *ngFor="let board of activityBoard" [board]="board" (click)="showLogDetails(board)"></app-activity-log>
+
+</div>
+
+<div class="logDetails">
+    <h1>Activity Details 🥇</h1>
+    <div class="log-content" *ngIf="isDisplayed">
+
+        <div class="titleBoard">
+            <h1 class="contentTitle">{{title}}</h1>
+            <p class="date">{{activityDate | date:'longDate'}}</p>
+        </div>
+
+        <div class="Desp">
+            <p class="mid-header">Description :</p>
+            <p style="margin-top: 6px;">{{notes}}</p>
+        </div>
+
+        <div class="feel">
+            <p class="mid-header">How did you feel?</p>
+        </div>
+    </div>
+
+
+
+</div>

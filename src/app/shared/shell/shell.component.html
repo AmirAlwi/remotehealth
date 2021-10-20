@@ -1,14 +1,66 @@
 <mat-sidenav-container class="sidenav-container">
 
-    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]=false>
+    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="'navigation'" [opened]="!(isHandset$ |async)" [mode]="(isHandset$ | async) ? 'over' : 'side'">
 
-        <mat-toolbar>Menu</mat-toolbar>
-        <mat-nav-list>
-            <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
-            <a mat-list-item routerLink="/login" (click)="drawer.close()">Login</a>
-            <a mat-list-item routerLink="/activity" (click)="drawer.close()">Activity</a>
-            <a mat-list-item routerLink="/connect" (click)="drawer.close()">Connect</a>
-            <a mat-list-item routerLink="/profile" (click)="drawer.close()">Profile</a>
+        <mat-toolbar style="cursor: pointer;" routerLink="/">⚕ Remote Health</mat-toolbar>
+
+        <mat-nav-list style="width: 280px;">
+            <a mat-list-item routerLink="/">🏠 Dashboard</a>
+
+            <a mat-list-item routerLink="/patients" *ngIf="user?.roles?.physician">🤒 Manage patient</a>
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            🏃‍♂️ Activity
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <p>
+                        <button mat-button routerLink="/activity/activityLog" style="width:190px;">
+                            🔥 Activity Log
+                        </button>
+                        <br>
+                        <button mat-button routerLink="/activityCalendar" style="width:190px;">
+                            📅 Calendar
+                        </button>
+                    </p>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            🚀 Connect
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <p>
+                        <button mat-button routerLink="/findDoc" style="width:190px;"> 
+                        <span>👨‍⚕️ Find A Doctor</span>
+                        </button>
+                        <br>
+                        <button mat-button routerLink="/postquestions" style="width:190px;">
+                        <span>❔ Post A Question</span>
+                    </button>
+                    </p>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" class="setting" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            ⚙ Setting
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div>
+                        <button mat-button routerLink="/login" style="width:190px;"> 
+                            <span>🔑 Login</span>
+                            </button>
+                    </div>
+                    <button mat-button routerLink="/profile" style="width:190px;">
+                        <span>👹 Profile</span>
+                    </button>
+                </mat-expansion-panel>
+
+            </mat-accordion>
+
         </mat-nav-list>
 
     </mat-sidenav>
@@ -18,68 +70,13 @@
             <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async ">
                 <mat-icon aria-label="side nav toggle icon">menu</mat-icon>
             </button>
-
-            <span class="logo" routerLink="/">⚕ Remote Health</span>
-            <span class="fill-space"></span>
-
-
-            <div *ngIf="!(isHandset$ |async)" class="navigationbar">
-                <a mat-button routerLink="/">🏠 Dashboard</a>
-                <button mat-button [matMenuTriggerFor]="activity" aria-label="Example icon-button with a menu">🏃‍♂️ Activity</button>
-                <button mat-button [matMenuTriggerFor]="connect" aria-label="Example icon-button with a menu">🚀 Connect</button>
-                <button mat-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">⚙ Setting</button>
-
-            </div>
-
-            <mat-menu #menu="matMenu">
-                <div>
-                    <a mat-menu-item>🚪 Sign Out</a>
-                </div>
-                <a mat-menu-item>🔑 Login</a>
-
-                <a mat-menu-item routerLink="/profile">
-                    <span>👹 Profile</span>
-                </a>
-
-            </mat-menu>
-
-            <ng-template #login>
-                <a mat-menu-item>🔑 Login</a>
-            </ng-template>
-
-            <!--
-            <div *ngIf="auth.user$ | async as user; else login">
-                <a mat-menu-item (click)="auth.singOut()">Sign Out</a>
-            </div>
-            
-            <ng-template #login>
-                <button class="btn btn-primary" (click)="signIn()">Login</button>
-            </ng-template>
-            -->
-
-
-            <mat-menu #connect="matMenu">
-                <a mat-menu-item routerLink="/findDoc">
-                    <span>👨‍⚕️ Find A Doctor</span>
-                </a>
-                <a mat-menu-item routerLink="/postquestions">
-                    <span>❔ Post A Question</span>
-                </a>
-            </mat-menu>
-
-            <mat-menu #activity="matMenu">
-                <a mat-menu-item routerLink="/findDoc">
-                    <span>🔥 Activity Log</span>
-                </a>
-                <a mat-menu-item routerLink="/postquestions">
-                    <span>📅 Calendar</span>
-                </a>
-            </mat-menu>
-
+            <span style="position: absolute; right:5%; font-size: 18pt; font-weight: bold;">{{topNavTitle}}</span>
         </mat-toolbar>
 
         <ng-content></ng-content>
 
     </mat-sidenav-content>
+
+
 
 </mat-sidenav-container>
