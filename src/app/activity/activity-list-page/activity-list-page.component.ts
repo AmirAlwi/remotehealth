@@ -1,9 +1,6 @@
 
-import { AfterViewInit, Component, HostListener, OnInit, Output, ViewChild, Input } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, Component, HostListener, OnInit, Input } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 import { ActivitydbService } from '../activitydb.service';
 import { activity } from './../activity.model'

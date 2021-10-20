@@ -8,19 +8,47 @@
     <h1>Activity Details 🥇</h1>
     <div class="log-content" *ngIf="isDisplayed">
 
-        <div class="titleBoard">
-            <h1 class="contentTitle">{{title}}</h1>
-            <p class="date">{{activityDate | date:'longDate'}}</p>
+        <mat-grid-list cols="10" rowHeight="100px">
+            <mat-grid-tile colspan="3" rowspan="1" class="right_border bot_border">
+                <div class="align-left">
+                    <h1 class="contentTitle">{{title}}</h1>
+                    <div class="date">
+                        {{activityDate | date:'longDate'}}
+                    </div>
+                </div>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="5" rowspan="2" class="right_border">
+                <div class="desp">
+                    <span class="mid-header" style="display: incline-block;">Description :</span>
+                    <button mat-flat-button class="note-button">Edit</button>
+                    <p class="notes">{{notes}}</p>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="2" class="bot_border">3</mat-grid-tile>
+            <mat-grid-tile colspan="3" rowspan="1" class="right_border">4</mat-grid-tile>
+        </mat-grid-list>
+
+        <!-- <div class="titleBoard">
+
+            <div class="feel">
+                <p class="mid-header">How did you feel?</p>
+            </div>
+
         </div>
 
-        <div class="Desp">
+        <div class="desp">
             <p class="mid-header">Description :</p>
             <p style="margin-top: 6px;">{{notes}}</p>
         </div>
 
-        <div class="feel">
-            <p class="mid-header">How did you feel?</p>
-        </div>
+        <div class="dispTime">
+            <h1 style="font-size: 20pt;">Time</h1>
+            <h2>Start :</h2>
+            <h2>Finish</h2>
+        </div> -->
+
+
     </div>
 
 
