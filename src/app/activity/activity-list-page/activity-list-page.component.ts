@@ -46,7 +46,7 @@ export class ActivityListPageComponent implements OnInit  {
   timeStart: any;
   timeEnd : any;
   timeInterval : number[];
-
+  ids: Array<number>;
 
   showLogDetails(value: any){
     try {
@@ -57,8 +57,11 @@ export class ActivityListPageComponent implements OnInit  {
       this.notes = this.data.notes;
       this.timeStart = Date.parse(this.toDateTime(this.data.time.starttime.toString()));
       this.timeEnd = Date.parse(this.toDateTime(this.data.time.endtime.toString()));
-      //this.setInterval();
-      //console.log(this.timeInterval);
+      this.timeInterval = this.setInterval();
+      console.log(this.timeInterval.length);
+      console.log(this.timeInterval[0]);
+      console.log(this.timeInterval[9]);
+      //TODO : continue construct time interval froms start stop time
     } catch (error) {
       console.log(error);
     }
@@ -66,13 +69,17 @@ export class ActivityListPageComponent implements OnInit  {
 
   setInterval(){
     const input = ((this.timeEnd - this.timeStart)/(1000 * 3600)*60);
-    for(var i = 0;i<input/6;i++) { 
-      if(i==0){
-        this.timeInterval[i] = i;
-      }else {
-        this.timeInterval[i] = i*10;
-      }      
-   }
+
+    const numb = new Array<number>(input/6);
+    for(let i = 1;i<=input/6;i++) { 
+      // if(i==0){
+      //   this.timeInterval[0] = 0;
+      // }else {
+          numb[i-1]= i;
+      // }
+      //console.log(numb[i]);      
+    }
+   return numb
   }
 
   toDate(input: string){
