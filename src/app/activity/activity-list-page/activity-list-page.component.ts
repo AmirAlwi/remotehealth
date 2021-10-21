@@ -45,6 +45,7 @@ export class ActivityListPageComponent implements OnInit  {
   notes : string;
   timeStart: any;
   timeEnd : any;
+  timeInterval : number[];
 
 
   showLogDetails(value: any){
@@ -56,9 +57,22 @@ export class ActivityListPageComponent implements OnInit  {
       this.notes = this.data.notes;
       this.timeStart = Date.parse(this.toDateTime(this.data.time.starttime.toString()));
       this.timeEnd = Date.parse(this.toDateTime(this.data.time.endtime.toString()));
+      //this.setInterval();
+      //console.log(this.timeInterval);
     } catch (error) {
-      
+      console.log(error);
     }
+  }
+
+  setInterval(){
+    const input = ((this.timeEnd - this.timeStart)/(1000 * 3600)*60);
+    for(var i = 0;i<input/6;i++) { 
+      if(i==0){
+        this.timeInterval[i] = i;
+      }else {
+        this.timeInterval[i] = i*10;
+      }      
+   }
   }
 
   toDate(input: string){
@@ -77,9 +91,11 @@ export class ActivityListPageComponent implements OnInit  {
     const hour = input.slice(9,11);
     const minute = input.slice(11,13);
     const longDate = month + " " + day + " " + year + " " + hour + ":"+ minute;
-    console.log(longDate);
+
     return longDate;
   }
+
+  
 
 }
 
