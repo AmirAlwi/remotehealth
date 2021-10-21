@@ -99,16 +99,15 @@
 }
 
 .feel {
-    // margin-left: 15px;
-    // min-width: 24%;
-    max-width: 25%;
+    position: absolute;
+    justify-content: center;
+    top: 5px;
 }
 
 .dispTime {
-    margin-left: 15px;
-    //display: inline-block;
-    // min-width: 15%;
-    // max-width: 20%;
+    position: absolute;
+    left: 15px;
+    top: 5px;
 }
 
 .right_border {
@@ -119,4 +118,8 @@
 .bot_border {
     border-bottom: 1px solid white;
     ;
+}
+
+.timeHeader {
+    display: inline-block;
 }

@@ -25,15 +25,26 @@
                     <p class="notes">{{notes}}</p>
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="2" rowspan="2" class="bot_border">3</mat-grid-tile>
-            <mat-grid-tile colspan="3" rowspan="1" class="right_border">4</mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="2" class="bot_border">
+                <div class="dispTime">
+                    <h1 style="font-size: 25pt; border-bottom: 1px solid white;">Time</h1>
+                    <br>
+                    <h2 class="timeHeader">Start : </h2>
+                    <h2 class="timeHeader" style="margin-left: 20px;">{{timeStart | date:'shortTime'}}</h2>
+                    <h2 class="timeHeader">Finish :</h2>
+                    <h2 class="timeHeader" style="margin-left: 10px;">{{timeEnd | date:'shortTime'}}</h2>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="3" rowspan="1" class="right_border">
+                <div class="feel">
+                    <h2 class="mid-header">How did you feel?</h2>
+                </div>
+            </mat-grid-tile>
         </mat-grid-list>
 
         <!-- <div class="titleBoard">
 
-            <div class="feel">
-                <p class="mid-header">How did you feel?</p>
-            </div>
+            
 
         </div>
 
