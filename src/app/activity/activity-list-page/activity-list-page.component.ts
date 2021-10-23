@@ -57,29 +57,11 @@ export class ActivityListPageComponent implements OnInit  {
       this.notes = this.data.notes;
       this.timeStart = Date.parse(this.toDateTime(this.data.time.starttime.toString()));
       this.timeEnd = Date.parse(this.toDateTime(this.data.time.endtime.toString()));
-      this.timeInterval = this.setInterval();
-      console.log(this.timeInterval.length);
-      console.log(this.timeInterval[0]);
-      console.log(this.timeInterval[9]);
-      //TODO : continue construct time interval froms start stop time
+      this.timeInterval = this.getTimeInterval(this.data.time.starttime.toString());
+      this.getDataArr();
     } catch (error) {
       console.log(error);
     }
-  }
-
-  setInterval(){
-    const input = ((this.timeEnd - this.timeStart)/(1000 * 3600)*60);
-
-    const numb = new Array<number>(input/6);
-    for(let i = 1;i<=input/6;i++) { 
-      // if(i==0){
-      //   this.timeInterval[0] = 0;
-      // }else {
-          numb[i-1]= i;
-      // }
-      //console.log(numb[i]);      
-    }
-   return numb
   }
 
   toDate(input: string){
@@ -100,6 +82,33 @@ export class ActivityListPageComponent implements OnInit  {
     const longDate = month + " " + day + " " + year + " " + hour + ":"+ minute;
 
     return longDate;
+  }
+
+  getTimeInterval(input : string){
+    const time = parseInt(input.slice(9,13));
+    let refTime = time;
+
+    const diff = ((this.timeEnd - this.timeStart)/(1000 * 3600)*60);
+    const numb = new Array<number>(diff);
+
+    let j = 0;
+
+    for(let i = 0;i<=diff;i++){ 
+      if(i % 60 !=0){
+        j++
+        numb[i]= refTime + j; 
+      } else{
+        numb[i]= time + ((i/60)*100);
+        refTime = time + (i/60)*100;
+        j = 0;
+      }
+    }
+    return numb 
+  }
+
+  //todo : try get one data first , if possible get all data at once
+  getDataArr(){
+    console.log(this.data.sensordata.temperature);
   }
 
   
