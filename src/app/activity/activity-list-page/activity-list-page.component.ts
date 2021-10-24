@@ -4,6 +4,7 @@ import { AfterViewInit, Component, HostListener, OnInit, Input } from '@angular/
 import { Subscription } from 'rxjs';
 import { ActivitydbService } from '../activitydb.service';
 import { activity } from './../activity.model'
+import { sensordata } from './../activity.model';
 
 @Component({
   selector: 'app-activity-list-page',
@@ -37,16 +38,17 @@ export class ActivityListPageComponent implements OnInit  {
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
+  isDisplayed : boolean = false;
 
   @Input() data: any  ;
   title:string;
-  isDisplayed : boolean = false;
-  activityDate : any;
   notes : string;
+  activityDate : any;
   timeStart: any;
   timeEnd : any;
   timeInterval : number[];
   ids: Array<number>;
+  sensData : sensordata;
 
   showLogDetails(value: any){
     try {
@@ -58,7 +60,8 @@ export class ActivityListPageComponent implements OnInit  {
       this.timeStart = Date.parse(this.toDateTime(this.data.time.starttime.toString()));
       this.timeEnd = Date.parse(this.toDateTime(this.data.time.endtime.toString()));
       this.timeInterval = this.getTimeInterval(this.data.time.starttime.toString());
-      this.getDataArr();
+      this.sensData = this.data.sensordata;
+
     } catch (error) {
       console.log(error);
     }
@@ -104,14 +107,7 @@ export class ActivityListPageComponent implements OnInit  {
       }
     }
     return numb 
-  }
-
-  //todo : try get one data first , if possible get all data at once
-  getDataArr(){
-    console.log(this.data.sensordata.temperature);
-  }
-
-  
+  }  
 
 }
 
