@@ -10,6 +10,8 @@ import {MatCardModule} from '@angular/material/card';
 import { ActivityListPageComponent } from './activity-list-page/activity-list-page.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [    ActivityLogComponent, ActivityListPageComponent],
@@ -20,7 +22,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     FormsModule,
     MatCardModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatGridListModule,
+    MatTabsModule
   ]
 })
 export class ActivityLogModule { }
