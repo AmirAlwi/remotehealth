@@ -6,6 +6,9 @@ import { ActivitydbService } from '../activitydb.service';
 import { activity } from './../activity.model'
 import { sensordata } from './../activity.model';
 
+import { Chart, registerables  } from 'chart.js';
+Chart.register(...registerables);
+
 @Component({
   selector: 'app-activity-list-page',
   templateUrl: './activity-list-page.component.html',
@@ -33,6 +36,8 @@ export class ActivityListPageComponent implements OnInit  {
     .subscribe(log => (this.activityBoard = log));
 
     this.isDisplayed = false
+
+    
   }
 
   ngOnDestroy() {
@@ -46,7 +51,7 @@ export class ActivityListPageComponent implements OnInit  {
   activityDate : any;
   timeStart: any;
   timeEnd : any;
-  timeInterval : number[];
+  timeInterval : string[];
   ids: Array<number>;
   sensData : sensordata;
 
@@ -62,6 +67,7 @@ export class ActivityListPageComponent implements OnInit  {
       this.timeInterval = this.getTimeInterval(this.data.time.starttime.toString());
       this.sensData = this.data.sensordata;
 
+      this.testChart();
     } catch (error) {
       console.log(error);
     }
@@ -93,21 +99,56 @@ export class ActivityListPageComponent implements OnInit  {
 
     const diff = ((this.timeEnd - this.timeStart)/(1000 * 3600)*60);
     const numb = new Array<number>(diff);
-
+    let stringNumb : string[] = new Array(numb.length);
     let j = 0;
 
     for(let i = 0;i<=diff;i++){ 
       if(i % 60 !=0){
         j++
         numb[i]= refTime + j; 
+        stringNumb[i] = numb[i].toString();
+
+        stringNumb[i] = ('0000'+ stringNumb[i]).slice(-4)
+
       } else{
         numb[i]= time + ((i/60)*100);
+        stringNumb[i] = numb[i].toString();
+
+        stringNumb[i] = ('0000'+ stringNumb[i]).slice(-4)
+
         refTime = time + (i/60)*100;
         j = 0;
       }
     }
-    return numb 
+    return stringNumb 
   }  
+
+  public myChart: Chart
+  //TODO : sync data with db
+  testChart(){
+    if (this.myChart) this.myChart.destroy();
+    const canvas = <HTMLCanvasElement> document.getElementById("myChart");
+    const ctx = canvas.getContext('2d');
+     this.myChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+        labels: this.timeInterval,
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: [0, 10, 5, 2, 20, 30, 45],
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+  }
 
 }
 
