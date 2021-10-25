@@ -11,6 +11,7 @@ import { ActivityListPageComponent } from './activity-list-page/activity-list-pa
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [    ActivityLogComponent, ActivityListPageComponent],
@@ -22,7 +23,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatCardModule,
     MatTableModule,
     MatPaginatorModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTabsModule
   ]
 })
 export class ActivityLogModule { }

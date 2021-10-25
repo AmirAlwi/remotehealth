@@ -46,13 +46,15 @@ export class ActivityListPageComponent implements OnInit  {
   isDisplayed : boolean = false;
 
   @Input() data: any  ;
+
   title:string;
   notes : string;
+
   activityDate : any;
   timeStart: any;
   timeEnd : any;
+
   timeInterval : string[];
-  ids: Array<number>;
   sensData : sensordata;
   temperature : number[];
 
@@ -68,6 +70,7 @@ export class ActivityListPageComponent implements OnInit  {
       this.timeInterval = this.getTimeInterval(this.data.time.starttime.toString());
       this.sensData = this.data.sensordata;
       this.innitData();
+
       this.testChart();
     } catch (error) {
       console.log(error);
@@ -75,11 +78,17 @@ export class ActivityListPageComponent implements OnInit  {
   }
 
   innitData(){
-    let length = this.sensData.temperature!.length;
+    let tempLength = this.sensData.temperature!.length;
+    let heartLength = this.sensData.heartrate!.length;
+    let oxyLength = this.sensData.oximeter!.length;
+
+    const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
+    const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
+    const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
+
+    //this.temperature = new Array(tempLength)
     
-    const test = JSON.parse(JSON.stringify(this.sensData.temperature));
-    this.temperature = new Array(length)
-    this.temperature = test;
+    this.temperature = temp;
   }
 
   toDate(input: string){
@@ -138,6 +147,9 @@ export class ActivityListPageComponent implements OnInit  {
   testChart(){
     if (this.myChart) this.myChart.destroy();
     const canvas = <HTMLCanvasElement> document.getElementById("myChart");
+    canvas.width = 100;
+    canvas.height = 20;
+
     const ctx = canvas.getContext('2d');
      this.myChart = new Chart(canvas, {
     type: 'line',
@@ -148,31 +160,34 @@ export class ActivityListPageComponent implements OnInit  {
           backgroundColor: 'rgb(255, 99, 132)',
           borderColor: 'rgb(255, 255, 255)',
           data: this.temperature,
+          
         }]
     },
     options: {
-        
+      responsive: true,
+      //maintainAspectRatio: false,
         scales: {
             y: {
               ticks: {
-                color: "white", // not 'fontColor:' anymore
-                // fontSize: 18,
+                color: "white", 
                 // font: {
                 //   size: 18, // 'size' now within object 'font {}'
                 // }  
               },
-              beginAtZero: true
+              min: 30 ,
+              beginAtZero: false
             },
-            x: {  // not 'xAxes: [{' anymore (not an array anymore)
+            x: {  
               ticks: {
-                color: "white",  // not 'fontColor:' anymore
-                //fontSize: 14,
+                color: "white",  
                 // font: {
                 //   size: 14 // 'size' now within object 'font {}'
                 // }
-                stepSize:0.01
+                autoSkip: true,
+                maxTicksLimit: 21
               },
               beginAtZero: true,
+              
               grid:{
                 color:"white"
               }
@@ -186,7 +201,7 @@ export class ActivityListPageComponent implements OnInit  {
               color: "white",  // not 'fontColor:' anymore
               // fontSize: 18  // not 'fontSize:' anymore
               font: {
-                size: 18 // 'size' now within object 'font {}'
+                size: 12 // 'size' now within object 'font {}'
               }
             }
           }
