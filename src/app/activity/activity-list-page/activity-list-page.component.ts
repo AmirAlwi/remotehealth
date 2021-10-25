@@ -54,6 +54,7 @@ export class ActivityListPageComponent implements OnInit  {
   timeInterval : string[];
   ids: Array<number>;
   sensData : sensordata;
+  temperature : number[];
 
   showLogDetails(value: any){
     try {
@@ -66,11 +67,19 @@ export class ActivityListPageComponent implements OnInit  {
       this.timeEnd = Date.parse(this.toDateTime(this.data.time.endtime.toString()));
       this.timeInterval = this.getTimeInterval(this.data.time.starttime.toString());
       this.sensData = this.data.sensordata;
-
+      this.innitData();
       this.testChart();
     } catch (error) {
       console.log(error);
     }
+  }
+
+  innitData(){
+    let length = this.sensData.temperature!.length;
+    
+    const test = JSON.parse(JSON.stringify(this.sensData.temperature));
+    this.temperature = new Array(length)
+    this.temperature = test;
   }
 
   toDate(input: string){
@@ -125,6 +134,7 @@ export class ActivityListPageComponent implements OnInit  {
 
   public myChart: Chart
   //TODO : sync data with db
+  //problem to take direct from activity type value
   testChart(){
     if (this.myChart) this.myChart.destroy();
     const canvas = <HTMLCanvasElement> document.getElementById("myChart");
@@ -136,17 +146,53 @@ export class ActivityListPageComponent implements OnInit  {
         datasets: [{
           label: 'My First dataset',
           backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 99, 132)',
-          data: [0, 10, 5, 2, 20, 30, 45],
+          borderColor: 'rgb(255, 255, 255)',
+          data: this.temperature,
         }]
     },
     options: {
+        
         scales: {
             y: {
-                beginAtZero: true
+              ticks: {
+                color: "white", // not 'fontColor:' anymore
+                // fontSize: 18,
+                // font: {
+                //   size: 18, // 'size' now within object 'font {}'
+                // }  
+              },
+              beginAtZero: true
+            },
+            x: {  // not 'xAxes: [{' anymore (not an array anymore)
+              ticks: {
+                color: "white",  // not 'fontColor:' anymore
+                //fontSize: 14,
+                // font: {
+                //   size: 14 // 'size' now within object 'font {}'
+                // }
+                stepSize:0.01
+              },
+              beginAtZero: true,
+              grid:{
+                color:"white"
+              }
+          }
+            
+            
+        },
+        plugins: {  // 'legend' now within object 'plugins {}'
+          legend: {
+            labels: {
+              color: "white",  // not 'fontColor:' anymore
+              // fontSize: 18  // not 'fontSize:' anymore
+              font: {
+                size: 18 // 'size' now within object 'font {}'
+              }
             }
-        }
+          }
+        },
     }
+
 });
   }
 
