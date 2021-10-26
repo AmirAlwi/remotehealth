@@ -31,7 +31,10 @@ export class ActivityLogComponent implements OnInit {
     const end = Date.parse(this.service.toDateTime(this.board.time.endtime.toString()));
     const start = Date.parse(this.service.toDateTime(this.board.time.starttime.toString()));
     const elapsed = (end - start)/(1000*3600)*60;
-    return elapsed
+    const hour = Math.floor(elapsed / 60);
+    const minutes = elapsed%60;
+    const time : string[] = [hour.toString(),minutes.toString()];
+    return time
   }
 
 
