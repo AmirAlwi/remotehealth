@@ -1,13 +1,11 @@
 <mat-card [ngClass]="status ? 'highlight' : 'none'" (click)="toggle()">
     <mat-card-header>
         <mat-card-title>
-            {{board.title}}
+            <h1>{{board.title}}</h1>
         </mat-card-title>
         <mat-card-subtitle>
-            {{board.notes}}
+            {{activityDate | date:'longDate'}}
         </mat-card-subtitle>
     </mat-card-header>
-    <button mat-stroked-button>
-            <mat-icon>add</mat-icon>
-          </button>
+
 </mat-card>

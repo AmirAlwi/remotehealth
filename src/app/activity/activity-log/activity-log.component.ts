@@ -1,3 +1,5 @@
+import { ActivityFunctionService } from './../activity-function.service';
+import { activity } from './../activity.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivitydbService } from '../activitydb.service';
 
@@ -9,9 +11,14 @@ import { ActivitydbService } from '../activitydb.service';
 export class ActivityLogComponent implements OnInit {
   
   @Input() board: any;
-  constructor( public xtvtdb : ActivitydbService) { }
+  constructor( public xtvtdb : ActivitydbService, public service : ActivityFunctionService) { }
+
+  activityDate : any;
+  elapsedTime : any;
 
   ngOnInit(): void {
+    this.activityDate = Date.parse(this.service.toDate(this.board.date.toString()));
+    this.elapsedTime = this.getElapsed()
   }
 
   status : boolean;
@@ -19,5 +26,13 @@ export class ActivityLogComponent implements OnInit {
   toggle(){
     this.status = !this.status;
   }
+
+  getElapsed(){
+    const end = Date.parse(this.service.toDateTime(this.board.time.endtime.toString()));
+    const start = Date.parse(this.service.toDateTime(this.board.time.starttime.toString()));
+    const elapsed = (end - start)/(1000*3600)*60;
+    return elapsed
+  }
+
 
 }
