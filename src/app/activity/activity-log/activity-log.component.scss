@@ -2,8 +2,29 @@ mat-card {
     margin-top: 20px;
     margin-left: 20px;
     margin-right: 20px;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .highlight {
-    background-color: rgb(100, 100, 100);
+    //background-color: rgb(100, 100, 100);
+}
+
+h1 {
+    font-size: 18pt;
+}
+
+.activityTime {
+    position: absolute;
+    right: 30px;
+    font-size: 12pt;
+    //border: 1px solid white;
+    padding-top: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 7px;
+    width: 60px;
+    background-color: #646162;
+    color: rgb(255, 255, 255);
+    letter-spacing: 1pt;
 }
