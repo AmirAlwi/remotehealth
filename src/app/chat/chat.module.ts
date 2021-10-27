@@ -1,3 +1,4 @@
+import { ChatRoutingModule } from './chat-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatBoardListComponent } from './chat-board-list/chat-board-list.component';
@@ -18,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
     SharedModule,
     MatPaginatorModule,
     MatTableModule,
+    ChatRoutingModule
   ]
 })
 export class ChatModule { }
