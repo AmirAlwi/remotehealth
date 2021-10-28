@@ -1,3 +1,4 @@
+import { ChatService } from './../chat.service';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -38,12 +39,16 @@ export class ConnectToPatientsComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  constructor( public chatReq : ChatService) {
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(test);
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    
   }
 
   ngAfterViewInit() {
