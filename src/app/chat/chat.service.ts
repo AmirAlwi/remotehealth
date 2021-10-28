@@ -14,14 +14,16 @@ export class ChatService {
   /**
    * get chat session data from firebase
    */
-  getChatRoomList(){
+  getChatRoomReq(){
     return this.auth.authState.pipe(switchMap(user=>{
       if (user){
         return this.db.collection<chatCredential>('chats',ref =>
       ref.where('members', 'array-contains', user?.uid)).valueChanges({idField : 'id'}); //.orderBy('createdAt')
+      
       } else {
         return [];
       }}));
 
   }
+
 }

@@ -35,7 +35,7 @@ export class ActivityListPageComponent implements OnInit  {
     
     this.sub = this.xtvtdb.getAcitivtyLog()
     .subscribe(log => (this.activityBoard = log));
-
+    
     this.isDisplayed = false
 
     
