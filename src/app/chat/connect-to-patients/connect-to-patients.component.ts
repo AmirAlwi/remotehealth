@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class ConnectToPatientsComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt'];
+  displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt','connStatus'];
   dataSource: MatTableDataSource<chatCredential>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -32,8 +32,6 @@ export class ConnectToPatientsComponent implements AfterViewInit {
     //this.chatReq.getChatRoomReq().forEach(list => (this.chatSessionList = list));
     this.dataSource = new MatTableDataSource(this.chatSessionList);
 
-   
-
   }
 
   ngAfterViewInit() {
@@ -51,7 +49,7 @@ export class ConnectToPatientsComponent implements AfterViewInit {
   }
 
   ngOnDestroy() {
-    //this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 }
 

@@ -4,7 +4,8 @@
 </mat-form-field>
 
 <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" matSort>
+
+    <table mat-table [dataSource]="chatSessionList" matSort>
 
         <ng-container matColumnDef="owner">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner </th>
@@ -21,15 +22,22 @@
             <td mat-cell *matCellDef="let row"> {{row.createdAt}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="connStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-raised-button color="primary">Accept</button>
+            </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
         <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="3">No data matching the filter "{{input.value}}"</td>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
         </tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 15, 20]" aria-label="Select page of users"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[1, 15, 20]" aria-label="Select page of chatSessionList"></mat-paginator>
 </div>
 
 <div *ngFor="let item of chatSessionList">
