@@ -22,10 +22,10 @@
             <td mat-cell *matCellDef="let row"> {{row.createdAt}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="connStatus">
+        <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
             <td mat-cell *matCellDef="let row">
-                <button mat-raised-button color="primary" (click)="acceptPatient()">Accept</button>
+                <button mat-raised-button color="primary" (click)="acceptPatient(row.id)">Accept</button>
             </td>
         </ng-container>
 
@@ -38,8 +38,4 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[10, 15, 20]" aria-label="Select page of chatSessionList"></mat-paginator>
-</div>
-
-<div *ngFor="let id of chatSessionList">
-    {{id.id}}
 </div>

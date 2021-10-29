@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class ConnectToPatientsComponent {
 
-  displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt','connStatus'];
+  displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt','id'];
   dataSource: MatTableDataSource<chatCredential>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -33,7 +33,6 @@ export class ConnectToPatientsComponent {
       this.dataSource = new MatTableDataSource(this.chatSessionList);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      console.log(this.chatSessionList)
     });
   }
 
@@ -47,8 +46,8 @@ export class ConnectToPatientsComponent {
   }
 
   @Input() docId : string;
-  acceptPatient(){
-    console.log()
+  acceptPatient(id : string){
+    console.log(id)
   }
 
   ngOnDestroy() {
