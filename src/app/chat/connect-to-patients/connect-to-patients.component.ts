@@ -23,12 +23,12 @@ export class ConnectToPatientsComponent {
 
   sub: Subscription;
 
-  constructor( public chatReq : ChatService) {
+  constructor( public cs : ChatService) {
     
   }
 
   ngOnInit(): void {
-    this.sub = this.chatReq.getChatRoomReq().subscribe((list) => {
+    this.sub = this.cs.getChatRoomReq().subscribe((list) => {
       this.chatSessionList = list;
       this.dataSource = new MatTableDataSource(this.chatSessionList);
       this.dataSource.paginator = this.paginator;
@@ -47,7 +47,7 @@ export class ConnectToPatientsComponent {
 
   @Input() docId : string;
   acceptPatient(id : string){
-    console.log(id)
+    this.cs.acceptPatient(id); 
   }
 
   ngOnDestroy() {
