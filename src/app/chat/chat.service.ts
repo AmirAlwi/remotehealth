@@ -18,7 +18,7 @@ export class ChatService {
     return this.auth.authState.pipe(switchMap(user=>{
       if (user){
         return this.db.collection<chatCredential>('chats',ref =>
-      ref.where('members', 'array-contains', user?.uid)).valueChanges({idField : 'id'}); //.orderBy('createdAt')
+      ref.where('connStatus', '==', false)).valueChanges({idField : 'id'}); //.orderBy('createdAt')
       
       } else {
         return [];

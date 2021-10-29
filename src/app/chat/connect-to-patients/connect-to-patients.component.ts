@@ -1,5 +1,5 @@
 import { ChatService } from './../chat.service';
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './connect-to-patients.component.html',
   styleUrls: ['./connect-to-patients.component.scss']
 })
-export class ConnectToPatientsComponent implements AfterViewInit {
+export class ConnectToPatientsComponent {
 
   displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt','connStatus'];
   dataSource: MatTableDataSource<chatCredential>;
@@ -28,15 +28,13 @@ export class ConnectToPatientsComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.sub = this.chatReq.getChatRoomReq().subscribe(list => (this.chatSessionList = list));
-    //this.chatReq.getChatRoomReq().forEach(list => (this.chatSessionList = list));
-    this.dataSource = new MatTableDataSource(this.chatSessionList);
-
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.sub = this.chatReq.getChatRoomReq().subscribe((list) => {
+      this.chatSessionList = list;
+      this.dataSource = new MatTableDataSource(this.chatSessionList);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log(this.chatSessionList)
+    });
   }
 
   applyFilter(event: Event) {
@@ -46,6 +44,11 @@ export class ConnectToPatientsComponent implements AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  @Input() docId : string;
+  acceptPatient(){
+    console.log()
   }
 
   ngOnDestroy() {
