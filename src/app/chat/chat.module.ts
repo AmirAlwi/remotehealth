@@ -6,6 +6,7 @@ import { ConnectToPatientsComponent } from './connect-to-patients/connect-to-pat
 import { SharedModule } from '../shared/shared.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { ChatSessionComponent } from './chat-session/chat-session.component';
 
 
 
@@ -14,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
   declarations: [
     ChatBoardListComponent,
     ConnectToPatientsComponent,
+    ChatSessionComponent,
   ],
   imports: [
     CommonModule,

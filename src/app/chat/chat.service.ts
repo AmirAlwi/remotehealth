@@ -1,3 +1,4 @@
+import { User } from './../user/login-page/user';
 import { GoogleSigninDirective } from './../user/google-signin.directive';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -28,6 +29,16 @@ export class ChatService {
 
   }
 
+  getMySession(){
+    return this.auth.authState.pipe(switchMap(user=>{
+      if (user){
+        return this.db.collection<chatCredential>('chats',ref =>
+      ref.where('members', 'array-contains', user.uid)).valueChanges({idField : 'id'}); //.orderBy('createdAt')
+      } else {
+        return [];
+      }}));
+  }
+
   async acceptPatient(docId : string){
     const user = await this.gService.getUser();
     const data = {
@@ -48,7 +59,9 @@ export class ChatService {
       );
   }
 
-  
+  getDispName(uid :string){
+    return this.db.doc<User>(`users/${uid}`).valueChanges();
+  }  
 
   joinUsers(chat$: Observable<any>) {
     type jKey = {

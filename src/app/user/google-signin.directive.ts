@@ -46,9 +46,10 @@ export class GoogleSigninDirective {
       email : user.email,
       roles: {
         patient: true
-      }
+      },
+      displayName : 'test'
     }
-    return userRef.set(data, { merge: true })  
+    return userRef.set(data, { merge: false })  
   }
 
   getUser(){

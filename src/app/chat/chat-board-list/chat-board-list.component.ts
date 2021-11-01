@@ -1,4 +1,7 @@
+import { Subscription } from 'rxjs';
+import { ChatService } from './../chat.service';
 import { Component, OnInit } from '@angular/core';
+import { chatCredential } from '../chat.model';
 
 @Component({
   selector: 'app-chat-board-list',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatBoardListComponent implements OnInit {
 
-  constructor() { }
+  chatSession : chatCredential[]
+  sub: Subscription;
+
+  constructor(public chat: ChatService) { }
 
   ngOnInit(): void {
+    this.sub = this.chat.getMySession().subscribe(
+      session => (this.chatSession = session)
+    );
   }
 
 }
