@@ -33,6 +33,9 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <p>
+                        <button mat-button routerLink="/connect/messages" style="width:190px;">
+                            <span>✉️ Messages</span>
+                        </button>
                         <button mat-button routerLink="/findDoc" style="width:190px;"> 
                         <span>👨‍⚕️ Find A Doctor</span>
                         </button>
@@ -42,7 +45,7 @@
                         </button>
                         <button mat-button routerLink="/connect/findPatient" style="width:190px;" *ngIf="user?.roles?.physician">
                             <span>🚑 Connect To Patient</span>
-                            </button>
+                        </button>
                     </p>
                 </mat-expansion-panel>
 
