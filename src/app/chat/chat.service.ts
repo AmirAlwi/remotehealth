@@ -43,6 +43,7 @@ export class ChatService {
     const user = await this.gService.getUser();
     const data = {
       members: arrayUnion(user.uid),
+      //dateAccept : Date.now(),
       connStatus: true
     } 
     return await this.db.doc(`chats/${docId}`).update(data);
@@ -50,15 +51,33 @@ export class ChatService {
 
   getMsg(docId : string){
     return this.db.collection<any>('chats')
-      .doc(`${docId}/Messages/current`)
+      .doc(docId)
       .snapshotChanges()
       .pipe(
         map(doc => {
+          console.log(doc.payload.data);
           return { id: doc.payload.id, ...doc.payload.data() };
         })
       );
   }
 
+  async sendMessage(chatId: any, content: any) {
+    const { uid } = await this.gService.getUser();
+
+    const data = {
+      uid,
+      content,
+      createdAt: Date.now()
+    };
+
+    if (uid) {
+      const ref = this.db.collection('chats').doc(chatId);
+      return ref.update({
+        msg: arrayUnion(data)
+      });
+    }
+  }
+  
   getDispName(uid :string){
     return this.db.doc<User>(`users/${uid}`).valueChanges();
   }  
@@ -67,14 +86,14 @@ export class ChatService {
     type jKey = {
       [key: string] : any;
     } 
-    let chat: { messages: any[]; };
+    let chat: { msg: any[]; };
     const joinKeys : jKey = {};
 
     return chat$.pipe(
       switchMap(c => {
         // Unique User IDs
         chat = c;
-        const uids = Array.from(new Set(c.messages.map((v: { uid: string; }) => v.uid)));
+        const uids = Array.from(new Set(c.msg.map((v: { uid: string; }) => v.uid)));
 
         // Firestore User Doc Reads
         const userDocs = uids.map(u =>
@@ -85,7 +104,7 @@ export class ChatService {
       }),
       map(arr => {
         arr.forEach(v => (joinKeys[(<any>v).uid] = v));
-        chat.messages = chat.messages.map(v => {
+        chat.msg = chat.msg.map(v => {
           return { ...v, user: joinKeys[v.uid] };
         });
 
