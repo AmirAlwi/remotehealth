@@ -33,7 +33,7 @@ export class ChatService {
     return this.auth.authState.pipe(switchMap(user=>{
       if (user){
         return this.db.collection<chatCredential>('chats',ref =>
-      ref.where('members', 'array-contains', user.uid)).valueChanges({idField : 'id'}); //.orderBy('createdAt')
+      ref.where('members', 'array-contains', user.uid)).valueChanges({idField : 'id'});
       } else {
         return [];
       }}));
@@ -55,7 +55,6 @@ export class ChatService {
       .snapshotChanges()
       .pipe(
         map(doc => {
-          console.log(doc.payload.data);
           return { id: doc.payload.id, ...doc.payload.data() };
         })
       );
