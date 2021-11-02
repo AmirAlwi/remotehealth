@@ -22,7 +22,8 @@
         </div>
 
         <div class="form">
-            <textarea matInput [(ngModel)]="newMsg" #message maxlength="256" placeholder="Message" (keydown.enter)="submit(chat.id)"></textarea>
+
+            <textarea matInput [(ngModel)]="newMsg" #message maxlength="256" placeholder="Message" (keydown.enter)="submit(chat.id)" style="resize: none; "></textarea>
 
             <button mat-flat-button color="primary" (click)="submit(chat.id)" style="margin-left: 40px; width: 80px;">Send</button> <br>
             <mat-hint align="end"> {{message.value.length}} / 256</mat-hint>
