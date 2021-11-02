@@ -49,7 +49,14 @@ export class GoogleSigninDirective {
       },
       displayName : 'test'
     }
-    return userRef.set(data, { merge: false })  
+    userRef.get().subscribe(snap =>{
+      if(!snap.exists){
+        return userRef.set(data, { merge: true }) ;
+      } else{
+        return null;
+      }
+    })
+    
   }
 
   getUser(){

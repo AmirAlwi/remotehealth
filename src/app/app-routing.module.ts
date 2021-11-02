@@ -28,7 +28,7 @@ const routes: Routes = [
   {
     path: 'connect',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
-    canActivate: [DoctorGuard]
+    canActivate: [UserGuard]
   }
 ];
 
