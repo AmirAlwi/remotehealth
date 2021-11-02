@@ -1,7 +1,7 @@
 import { Directive, HostListener } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {  getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { switchMap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { User } from './login-page/user';
 import { Observable, of } from 'rxjs';
@@ -46,10 +46,21 @@ export class GoogleSigninDirective {
       email : user.email,
       roles: {
         patient: true
-      }
+      },
+      displayName : 'test'
     }
-    //localStorage.setItem('currentUid',user.uid);
-    return userRef.set(data, { merge: true })  
+    userRef.get().subscribe(snap =>{
+      if(!snap.exists){
+        return userRef.set(data, { merge: true }) ;
+      } else{
+        return null;
+      }
+    })
+    
+  }
+
+  getUser(){
+    return this.user$.pipe(first()).toPromise();
   }
 
   isAdmin(user: User): boolean {

@@ -8,8 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 import {MatCardModule} from '@angular/material/card';
 import { ActivityListPageComponent } from './activity-list-page/activity-list-page.component';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
 
@@ -21,8 +20,6 @@ import { MatTabsModule } from '@angular/material/tabs';
     SharedModule,
     FormsModule,
     MatCardModule,
-    MatTableModule,
-    MatPaginatorModule,
     MatGridListModule,
     MatTabsModule
   ]

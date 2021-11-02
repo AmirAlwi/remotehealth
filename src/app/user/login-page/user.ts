@@ -8,4 +8,5 @@ export interface User{
     uid : string;
     email :string;
     roles :Roles;
+    displayName : string;
 }

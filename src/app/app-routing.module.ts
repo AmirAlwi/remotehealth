@@ -24,6 +24,11 @@ const routes: Routes = [
     path: 'patients',
     component: ManagePatientComponent,
     canActivate: [DoctorGuard,UserGuard]
+  },
+  {
+    path: 'connect',
+    loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
+    canActivate: [UserGuard]
   }
 ];
 
