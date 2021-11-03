@@ -4,10 +4,12 @@ h1 {
 
 button {
     img {
-        height: 35px;
+        height: 70px;
     }
     font-size: 16pt;
     margin-top: 50px;
+    min-height: 100px;
+    border-radius: 20px;
 }
 
 :host {

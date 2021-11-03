@@ -1,10 +1,16 @@
 <main>
     <div *ngIf="!(gAuth.authState | async)">
 
-        <button mat-raised-button (click)="signIn()" style="height:  50px;">
+        <button mat-raised-button (click)="signIn()">
             <img src="/assets/google-icon.svg" /> Login With Google
         </button>
     </div>
+
+    <br>
+    <br>
+    <p style="font-size: 20pt; font-weight: bold;">OR</p>
+    <br><br>
+    <app-email-login></app-email-login>
 
     <div *ngIf="gAuth.authState |async as user" class="logout">
         <p>
