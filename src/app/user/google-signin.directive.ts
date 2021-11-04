@@ -47,8 +47,7 @@ export class GoogleSigninDirective {
       email : user.email,
       roles: {
         patient: true
-      },
-      displayName : 'test'
+      }
     }
     userRef.get().subscribe(snap =>{
       if(!snap.exists){

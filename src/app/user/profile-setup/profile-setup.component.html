@@ -1,0 +1,61 @@
+<mat-card class="window">
+
+    <h2 class="header">Profile Setup</h2>
+
+    <br>
+    <mat-card-content>
+        <form class="example-form" [formGroup]="form">
+
+            <table class="full-width" cellspacing="0">
+                <h4 style="line-height: 0px; margin-left: 10px;">Name</h4>
+                <tr>
+                    <td>
+                        <mat-form-field class="two-line" appearance="fill">
+                            <mat-label>First name</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="two-line" appearance="fill" style="margin-left: 30px;">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Choose one</mat-label>
+                <mat-select formControlName="gender">
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                </mat-select>
+                <mat-error *ngIf="gender?.hasError('required')">You must make a selection</mat-error>
+            </mat-form-field>
+            <!-- continue here -->
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="Ex. San Francisco">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>State</mat-label>
+                            <input matInput placeholder="Ex. California">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Postal Code</mat-label>
+                            <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
+                            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </mat-card-content>
+</mat-card>

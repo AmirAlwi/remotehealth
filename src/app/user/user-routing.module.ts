@@ -1,3 +1,4 @@
+import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './login-page/login-page.component';
@@ -6,6 +7,10 @@ const routes: Routes = [
   {
     path :  '',
     component : LoginPageComponent
+  },
+  {
+    path : 'profileSetup',
+    component : ProfileSetupComponent
   }
 
 ];

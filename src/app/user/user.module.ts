@@ -7,19 +7,23 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { GoogleSigninDirective } from './google-signin.directive';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
   declarations: [
     LoginPageComponent,
     GoogleSigninDirective,
-    EmailLoginComponent
+    EmailLoginComponent,
+    ProfileSetupComponent
   ],
   imports: [
     CommonModule,
     UserRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule
   ]
 })
 export class UserModule { }

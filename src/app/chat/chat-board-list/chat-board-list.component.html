@@ -11,7 +11,7 @@
             <div class="msg" *ngFor="let msg of chat.msg; trackBy: trackByCreated">
 
                 <div class="user">
-                    <img [src]="msg.user?.photoURL || 'assets/google-icon.svg'" width="30px">
+                    <img [src]="msg.user?.photoURL || 'assets/duck.svg'" width="40px">
                     <div><span>{{ msg.user?.displayName }}</span></div>
                 </div>
 
