@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { User } from '.././login-page/user';
+import { delay, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-email-login',
@@ -72,14 +73,14 @@ export class EmailLoginComponent implements OnInit {
 
     try {
       if (this.isLogin) {
-        await this.afauth.signInWithEmailAndPassword(email, password);
+        await this.afauth.signInWithEmailAndPassword(email, password);    
       }
       if (this.isSignup) {
         await this.afauth.createUserWithEmailAndPassword(email, password)
         .then((credential) =>{
-          this.updateUserData(credential.user) ;
-          //TODO : REROUTE TO PROFILE
+          this.updateUserData(credential.user);
         }); 
+        this.checkUserNRouting();     
       }
       if (this.isPasswordReset) {
         await this.afauth.sendPasswordResetEmail(email);
@@ -91,8 +92,23 @@ export class EmailLoginComponent implements OnInit {
 
     this.loading = false;
   }
+
+  /**
+   * check user data finished recorded, and rerouting page
+   */
+  async checkUserNRouting(){
+     this.afauth.authState.subscribe( u =>{
+      if(u){
+        const data = this.firestore.doc<User>(`users/${u.uid}`).valueChanges();
+        data.subscribe(ui => {
+        this.router.navigate(['/activity/activityLog']);}
+        );       
+      }
+    });
+  }
   
   private updateUserData(user : any) {
+    console.log('before update')
     const userRef: AngularFirestoreDocument<User> = this.firestore.doc(`users/${user.uid}`);
     const data : User = {
       uid : user.uid,
@@ -102,13 +118,12 @@ export class EmailLoginComponent implements OnInit {
       },
       displayName : ''
     }
-    userRef.get().subscribe(snap =>{
+     userRef.get().subscribe(snap =>{
       if(!snap.exists){
         return userRef.set(data, { merge: true }) ;
       } else{
         return null;
       }
-    })
-    
+    });
   }
 }

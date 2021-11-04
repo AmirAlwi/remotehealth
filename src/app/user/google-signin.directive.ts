@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Directive, HostListener } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {  getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -16,7 +17,7 @@ export class GoogleSigninDirective {
 
   user$: Observable<User>;
 
-  constructor(private gAuth : AngularFireAuth, private firestore : AngularFirestore) {
+  constructor(private gAuth : AngularFireAuth, private firestore : AngularFirestore, private router : Router) {
 
           this.user$ = this.gAuth.authState.pipe(
           switchMap(user => {
@@ -55,8 +56,7 @@ export class GoogleSigninDirective {
       } else{
         return null;
       }
-    })
-    
+    });
   }
 
   getUser(){
