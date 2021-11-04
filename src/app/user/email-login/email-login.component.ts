@@ -16,6 +16,7 @@ export class EmailLoginComponent implements OnInit {
   type: 'login'| 'signup'| 'reset' = 'signup';
   loading = false;
   serverMessage: any;
+  hide = true;
 
   constructor( private afauth: AngularFireAuth, private fb: FormBuilder,private router: Router, private firestore : AngularFirestore) {
 
@@ -101,7 +102,7 @@ export class EmailLoginComponent implements OnInit {
       if(u){
         const data = this.firestore.doc<User>(`users/${u.uid}`).valueChanges();
         data.subscribe(ui => {
-        this.router.navigate(['/activity/activityLog']);}
+        this.router.navigate(['/login/profileSetup']);}
         );       
       }
     });
@@ -115,8 +116,7 @@ export class EmailLoginComponent implements OnInit {
       email : user.email,
       roles: {
         patient: true
-      },
-      displayName : ''
+      }
     }
      userRef.get().subscribe(snap =>{
       if(!snap.exists){

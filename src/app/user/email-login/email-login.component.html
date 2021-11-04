@@ -34,7 +34,10 @@
         </mat-form-field>
 
         <mat-form-field [color]="email?.valid && 'accent'" *ngIf="!isPasswordReset">
-            <input matInput formControlName="password" type="password" placeholder="Password" autocomplete="off" />
+            <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" placeholder="Password" autocomplete="off" />
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
 
             <mat-error *ngIf="password?.invalid && password?.dirty">
                 Password must be at least 6 characters long
