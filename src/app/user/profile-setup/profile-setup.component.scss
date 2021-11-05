@@ -1,21 +1,35 @@
 .window {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 8%;
-    height: 500px;
-    width: 700px;
+    margin-top: 3%;
+    height: 600px;
+    width: 500px;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 .full-width {
     width: 100%;
 }
 
-.two-line {
+.full-width {
     min-width: 90%;
+}
+
+.half-width {
+    min-width: 50%;
 }
 
 .header {
     border-bottom: white solid 1px;
     line-height: 30px;
     text-align: center;
+}
+
+.mat-raised-button {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 85%;
 }

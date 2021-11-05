@@ -9,7 +9,8 @@ import { GoogleSigninDirective } from './google-signin.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
 import { MatSelectModule } from '@angular/material/select';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,9 @@ import { MatSelectModule } from '@angular/material/select';
     UserRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class UserModule { }

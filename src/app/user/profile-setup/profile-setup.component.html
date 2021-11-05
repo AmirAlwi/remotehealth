@@ -2,60 +2,56 @@
 
     <h2 class="header">Profile Setup</h2>
 
-    <br>
     <mat-card-content>
-        <form class="example-form" [formGroup]="form">
+        <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
 
-            <table class="full-width" cellspacing="0">
-                <h4 style="line-height: 0px; margin-left: 10px;">Name</h4>
-                <tr>
-                    <td>
-                        <mat-form-field class="two-line" appearance="fill">
-                            <mat-label>First name</mat-label>
-                            <input matInput>
-                        </mat-form-field>
-                    </td>
-                    <td>
-                        <mat-form-field class="two-line" appearance="fill" style="margin-left: 30px;">
-                            <mat-label>Last Name</mat-label>
-                            <input matInput>
-                        </mat-form-field>
-                    </td>
-                </tr>
-            </table>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Choose one</mat-label>
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="fname" autocomplete="off" type="text" />
+                <mat-error *ngIf="fname?.hasError('required')">input required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lname" autocomplete="off" type="text" />
+                <mat-error *ngIf="lname?.hasError('required')">input required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Sex</mat-label>
                 <mat-select formControlName="gender">
                     <mat-option value="Male">Male</mat-option>
                     <mat-option value="Female">Female</mat-option>
                 </mat-select>
                 <mat-error *ngIf="gender?.hasError('required')">You must make a selection</mat-error>
             </mat-form-field>
-            <!-- continue here -->
-            <table class="example-full-width" cellspacing="0">
-                <tr>
-                    <td>
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>City</mat-label>
-                            <input matInput placeholder="Ex. San Francisco">
-                        </mat-form-field>
-                    </td>
-                    <td>
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>State</mat-label>
-                            <input matInput placeholder="Ex. California">
-                        </mat-form-field>
-                    </td>
-                    <td>
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Postal Code</mat-label>
-                            <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
-                            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-                        </mat-form-field>
-                    </td>
-                </tr>
-            </table>
+            <br>
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Birth Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthdate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="birthdate?.hasError('required')">Date required</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="half-width" appearance="outline">
+                <mat-label>Height</mat-label>
+                <input matInput formControlName="height" autocomplete="off" type="number" />
+                <mat-error *ngIf="height?.hasError('required')">Input required</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="half-width" appearance="outline">
+                <mat-label>Weight</mat-label>
+                <input matInput formControlName="weight" autocomplete="off" type="number" />
+                <mat-error *ngIf="weight?.hasError('required')">Input required</mat-error>
+            </mat-form-field>
+
+            <mat-error class="server-error">{{ serverMessage }}</mat-error>
+            <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid || loading">
+            submit
+            </button>
+
         </form>
     </mat-card-content>
 </mat-card>

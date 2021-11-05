@@ -61,6 +61,7 @@
     <button *ngIf="isPasswordReset" mat-stroked-button type="submit" [disabled]="loading">
     Send Reset Email
     </button> -->
+
     <button mat-stroked-button *ngIf="isLogin && !isPasswordReset" (click)="changeType('reset')">
     Forgot password?
   </button>
