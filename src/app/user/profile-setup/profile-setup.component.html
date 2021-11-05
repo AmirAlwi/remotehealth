@@ -36,13 +36,13 @@
             </mat-form-field>
             <br>
             <mat-form-field class="half-width" appearance="outline">
-                <mat-label>Height</mat-label>
+                <mat-label>Height (CM)</mat-label>
                 <input matInput formControlName="height" autocomplete="off" type="number" />
                 <mat-error *ngIf="height?.hasError('required')">Input required</mat-error>
             </mat-form-field>
             <br>
             <mat-form-field class="half-width" appearance="outline">
-                <mat-label>Weight</mat-label>
+                <mat-label>Weight (KG)</mat-label>
                 <input matInput formControlName="weight" autocomplete="off" type="number" />
                 <mat-error *ngIf="weight?.hasError('required')">Input required</mat-error>
             </mat-form-field>
@@ -53,6 +53,8 @@
             </button>
 
         </form>
-        <p>{{ test | date:'longDate'}}</p>
     </mat-card-content>
+    <mat-card-header>
+        <h4 style="color: rgb(30, 175, 219);">*User profile must be completed in order to use all available feature</h4>
+    </mat-card-header>
 </mat-card>
