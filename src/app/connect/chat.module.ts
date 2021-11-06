@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { ChatSessionComponent } from './chat-session/chat-session.component';
+import { PostQuestionsComponent } from './post-questions/post-questions.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { ChatSessionComponent } from './chat-session/chat-session.component';
     ChatBoardListComponent,
     ConnectToPatientsComponent,
     ChatSessionComponent,
+    PostQuestionsComponent,
   ],
   imports: [
     CommonModule,

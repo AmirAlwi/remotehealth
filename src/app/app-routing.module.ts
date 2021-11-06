@@ -1,5 +1,4 @@
 import { UserGuard } from './user/user.guard';
-import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -19,11 +18,6 @@ const routes: Routes = [
     path: 'activity',
     loadChildren: () => import('./activity/activity.module').then(m => m.ActivityLogModule),
     canActivate: [ UserGuard]
-  },
-  {
-    path: 'patients',
-    component: ManagePatientComponent,
-    canActivate: [DoctorGuard,UserGuard]
   },
   {
     path: 'connect',
