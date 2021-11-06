@@ -6,7 +6,7 @@
 
         <mat-nav-list style="width: 280px;">
             <a mat-list-item routerLink="/">🏠 Dashboard</a>
-            <a mat-list-item routerLink="/patients" *ngIf="user?.roles?.physician">🤒 Manage patient</a>
+
             <mat-accordion>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
@@ -32,12 +32,11 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <p>
-                        <button mat-button routerLink="/findDoc" style="width:190px;"> 
-                        <span>👨‍⚕️ Find A Doctor</span>
+                        <button mat-button routerLink="/connect/postquestions" style="width:190px;">
+                            <span>❔ Post A Question</span>
                         </button>
-                        <br>
-                        <button mat-button routerLink="/postquestions" style="width:190px;">
-                        <span>❔ Post A Question</span>
+                        <button mat-button routerLink="/connect/patients" *ngIf="user?.roles?.physician" style="width:190px;"> 
+                        <span>🤒 Manage patient</span>
                         </button>
                         <button mat-button routerLink="/connect/findPatient" style="width:190px;" *ngIf="user?.roles?.physician">
                             <span>🚑 Connect To Patient</span>
