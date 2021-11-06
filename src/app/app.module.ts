@@ -14,6 +14,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

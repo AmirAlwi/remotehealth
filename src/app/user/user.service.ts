@@ -38,4 +38,13 @@ export class UserService {
   }); 
   }
 
+  getProfile(){
+    return this.afAuth.authState.pipe(switchMap(user=>{
+      if (user){
+        return this.db.doc<any>(`users/${user.uid}`).valueChanges();
+      } else {
+        return [];
+      }}));
+  }
+
 }

@@ -30,7 +30,6 @@ export class ProfileSetupComponent implements OnInit {
   async onSubmit(){
     this.loading = true;
 
-    console.log("submitting");
     const data : User ={
       fName : this.fname?.value,
       lName : this.lname?.value,

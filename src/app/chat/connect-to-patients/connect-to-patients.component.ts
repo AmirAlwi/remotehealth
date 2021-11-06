@@ -19,7 +19,6 @@ export class ConnectToPatientsComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   chatSessionList : chatCredential[];
-  test : any[];
 
   sub: Subscription;
 

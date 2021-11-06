@@ -11,13 +11,17 @@ import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatTabsModule} from '@angular/material/tabs';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+
 
 @NgModule({
   declarations: [
     LoginPageComponent,
     GoogleSigninDirective,
     EmailLoginComponent,
-    ProfileSetupComponent
+    ProfileSetupComponent,
+    ProfilePageComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +30,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     ReactiveFormsModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTabsModule
   ]
 })
 export class UserModule { }

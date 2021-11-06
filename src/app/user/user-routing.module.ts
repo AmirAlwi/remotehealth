@@ -1,3 +1,4 @@
+import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UserGuard } from './user.guard';
 import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
 import { NgModule } from '@angular/core';
@@ -12,6 +13,11 @@ const routes: Routes = [
   {
     path : 'profileSetup',
     component : ProfileSetupComponent,
+    canActivate : [UserGuard]
+  },
+  {
+    path : 'profile',
+    component : ProfilePageComponent,
     canActivate : [UserGuard]
   }
 
