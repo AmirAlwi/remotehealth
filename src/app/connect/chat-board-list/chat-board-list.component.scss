@@ -103,9 +103,12 @@
 }
 
 textarea {
-    resize: none;
-    height: 50px;
     width: 85%;
+    height: 50px;
+    resize: none;
+    background-color: #555555;
+    color: white;
+    font-size: 12pt;
 }
 
 .mat-hint {

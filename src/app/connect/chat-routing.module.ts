@@ -1,3 +1,4 @@
+import { PostQuestionsComponent } from './post-questions/post-questions.component';
 import { ChatBoardListComponent } from './chat-board-list/chat-board-list.component';
 import { ConnectToPatientsComponent } from './connect-to-patients/connect-to-patients.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path : 'messages',
     component: ChatBoardListComponent
+  },
+  {
+    path: 'postquestions',
+    component: PostQuestionsComponent
   }
 ];
 

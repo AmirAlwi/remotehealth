@@ -1,0 +1,77 @@
+<mat-tab-group class="vertical-tabs" mat-align-tabs="start">
+    <mat-tab label="My Profile">
+
+        <mat-card class="window">
+
+            <h1 class="header">My Profile</h1>
+            <br>
+            <mat-card-content>
+                <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                    <img class="profilePic" [src]="'assets/cat.jpg'">
+                    <br><br>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>First name</mat-label>
+                        <input matInput autocomplete="off" type="text" [readonly]="edit" formControlName="fname" />
+
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput autocomplete="off" type="text" [readonly]="edit" formControlName="lname" />
+                    </mat-form-field>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <mat-form-field appearance="outline" style="min-width: 380px;">
+                                    <mat-label>Sex</mat-label>
+                                    <mat-select formControlName="gender">
+                                        <mat-option [disabled]="edit" value="Male">Male</mat-option>
+                                        <mat-option [disabled]="edit" value="Female">Female</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Birth Date</mat-label>
+                                    <input matInput [matDatepicker]="picker" [readonly]="edit" formControlName="birthdate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="edit"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="half-width" appearance="outline">
+                                    <mat-label>Height (CM)</mat-label>
+                                    <input matInput autocomplete="off" type="number" [readonly]="edit" formControlName="height" />
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="half-width" appearance="outline">
+                                    <mat-label>Weight (KG)</mat-label>
+                                    <input matInput autocomplete="off" type="number" [readonly]="edit" formControlName="weight" />
+                                </mat-form-field>
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <br>
+                    <br>
+                    <button mat-raised-button style="margin-left: 580px;" type="button" (click)="formDisable()" class="editbtn"> {{buttonName}}</button>
+                    <button mat-raised-button style="background-color: rgb(21, 69, 202); margin-left: 20px;" type="submit" [disabled]="form.invalid || loading || edit">
+                    submit
+                    </button>
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-tab>
+    <mat-tab label="Data Sharing">
+        Content 2
+    </mat-tab>
+</mat-tab-group>

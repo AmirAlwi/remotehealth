@@ -5,8 +5,13 @@ export interface Roles {
 }
 
 export interface User{
-    uid : string;
-    email :string;
-    roles :Roles;
-    displayName : string;
+    uid? : string;
+    email? :string;
+    roles? :Roles;
+    fName? : string;
+    lName? : string;
+    birthdate? : number;
+    gender? : string;
+    weight? : number;
+    height?: number;
 }

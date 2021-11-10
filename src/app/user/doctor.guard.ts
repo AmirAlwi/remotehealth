@@ -18,7 +18,7 @@ export class DoctorGuard implements CanActivate {
       
     return this.auth.user$.pipe(
       take(1),
-      map(user => user && user.roles.physician ? true: false),
+      map(user => user && user.roles?.physician ? true: false),
       tap(isDoctor =>{
         if (!isDoctor) {
           console.error('Access denied - Organisation only')

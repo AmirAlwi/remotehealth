@@ -21,7 +21,7 @@ export class ChatSessionComponent implements OnInit {
     for(let item of this.membersID){
       if (item != userUid ){
         this.chat.getDispName(item).subscribe( disp =>{
-          this.endPersonId = disp?.displayName;
+          this.endPersonId = disp?.fName;
         })
       }
     }

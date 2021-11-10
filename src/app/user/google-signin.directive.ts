@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Directive, HostListener } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {  getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -16,7 +17,7 @@ export class GoogleSigninDirective {
 
   user$: Observable<User>;
 
-  constructor(private gAuth : AngularFireAuth, private firestore : AngularFirestore) {
+  constructor(private gAuth : AngularFireAuth, private firestore : AngularFirestore, private router : Router) {
 
           this.user$ = this.gAuth.authState.pipe(
           switchMap(user => {
@@ -35,7 +36,14 @@ export class GoogleSigninDirective {
   onclick() {
     this.gAuth.signInWithPopup(new GoogleAuthProvider())
     .then((credential) =>{
-      this.updateUserData(credential.user);
+        this.gAuth.authState.subscribe(u=>{
+          if (u?.metadata.creationTime === u?.metadata.lastSignInTime){
+            this.updateUserData(credential.user);
+            this.router.navigate(['/login/profileSetup']);
+          } else{
+            this.router.navigate(['/']);
+          }
+        });
     });  
   }
 
@@ -46,16 +54,16 @@ export class GoogleSigninDirective {
       email : user.email,
       roles: {
         patient: true
-      },
-      displayName : 'test'
+      }
     }
+    console.log('inside update')
     userRef.get().subscribe(snap =>{
       if(!snap.exists){
         return userRef.set(data, { merge: true }) ;
       } else{
         return null;
       }
-    })
+    });
     
   }
 
@@ -63,41 +71,41 @@ export class GoogleSigninDirective {
     return this.user$.pipe(first()).toPromise();
   }
 
-  isAdmin(user: User): boolean {
-    const allowed = 'admin'
-    return this.checkAuthorisation(user, allowed)
-  }
+  // isAdmin(user: User): boolean {
+  //   const allowed = 'admin'
+  //   return this.checkAuthorisation(user, allowed)
+  // }
 
-  isPatient(user: User): boolean {
-    const allowed = 'patient'
-    return this.checkAuthorisation(user, allowed)
-  }
+  // isPatient(user: User): boolean {
+  //   const allowed = 'patient'
+  //   return this.checkAuthorisation(user, allowed)
+  // }
 
-  isDoctor(user: User): boolean {
-    const allowed = 'physician'
-    return this.checkAuthorisation(user, allowed)
-  }
+  // isDoctor(user: User): boolean {
+  //   const allowed = 'physician'
+  //   return this.checkAuthorisation(user, allowed)
+  // }
 
-  private checkAuthorisation(user: User, allowadRole : string) : boolean {
-    if (!user) return false;
+  // private checkAuthorisation(user: User, allowadRole : string) : boolean {
+  //   if (!user) return false;
 
-    if (allowadRole = "patient"){
-      if ( user.roles["patient"] ){
-        return true;
-      }
-    } else if (allowadRole = "physician"){
-        if ( user.roles["physician"] ){
-          return true;
-        }
-    } else if (allowadRole = "admin"){
-      if ( user.roles["admin"] ){
-        return true;
-      }
-    }
+  //   if (allowadRole = "patient"){
+  //     if ( user.roles["patient"] ){
+  //       return true;
+  //     }
+  //   } else if (allowadRole = "physician"){
+  //       if ( user.roles["physician"] ){
+  //         return true;
+  //       }
+  //   } else if (allowadRole = "admin"){
+  //     if ( user.roles["admin"] ){
+  //       return true;
+  //     }
+  //   }
 
-    return false;
+  //   return false;
 
-  }
+  // }
 
 
 }
