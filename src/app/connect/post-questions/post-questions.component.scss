@@ -1,0 +1,35 @@
+.mat-card {
+    margin-top: 150px;
+    margin-left: 320px;
+    margin-right: 320px;
+    padding: 50px;
+}
+
+.header-image {
+    background-image: url('./../../../assets/doctor-logo-icon.jpg');
+    background-size: cover;
+}
+
+.mat-card-content {
+    margin-top: 30px;
+    margin-left: 13%;
+    margin-right: auto;
+}
+
+textarea {
+    width: 80%;
+    height: 85px;
+    resize: none;
+    background-color: #555555;
+    color: rgb(241, 241, 241);
+    border: white solid 1px;
+    font-size: 12pt;
+}
+
+.full-width {
+    min-width: 80%;
+}
+
+.form {
+    display: flexbox;
+}

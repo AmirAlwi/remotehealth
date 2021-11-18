@@ -9,7 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { ChatSessionComponent } from './chat-session/chat-session.component';
 import { PostQuestionsComponent } from './post-questions/post-questions.component';
-
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { PostQuestionsComponent } from './post-questions/post-questions.componen
     MatPaginatorModule,
     MatTableModule,
     ChatRoutingModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ]
 })
 export class ChatModule { }
