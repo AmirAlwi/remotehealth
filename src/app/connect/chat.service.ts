@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { map, switchMap } from 'rxjs/operators';
-import { chatCredential } from './chat.model';
+import { chatCredential, postQ } from './chat.model';
 import { arrayUnion } from 'firebase/firestore'
 import { combineLatest, Observable, of } from 'rxjs';
 
@@ -47,6 +47,13 @@ export class ChatService {
       connStatus: true
     } 
     return await this.db.doc(`chats/${docId}`).update(data);
+  }
+
+  async sendQuestion (data : postQ){
+    const user = await this.gService.getUser();
+    data["members"]?.push(user.uid!)
+    data.owner = user.uid;
+    return await this.db.collection(`chats`).add(data);
   }
 
   getMsg(docId : string){

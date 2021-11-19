@@ -1,4 +1,3 @@
-import { FormsModule } from '@angular/forms';
 import { ChatRoutingModule } from './chat-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -10,7 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ChatSessionComponent } from './chat-session/chat-session.component';
 import { PostQuestionsComponent } from './post-questions/post-questions.component';
 import { MatSelectModule } from '@angular/material/select';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     ChatBoardListComponent,
@@ -24,8 +23,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatPaginatorModule,
     MatTableModule,
     ChatRoutingModule,
+    MatSelectModule,
     FormsModule,
-    MatSelectModule
+    ReactiveFormsModule
   ]
 })
 export class ChatModule { }

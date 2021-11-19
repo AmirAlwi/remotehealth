@@ -1,9 +1,8 @@
+import { postQ, Tag } from './../chat.model';
+import { ChatService } from './../chat.service';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-
-interface Tag {
-  value: string; 
-  viewValue: string;
-}
+import { arrayUnion } from 'firebase/firestore'
 
 @Component({
   selector: 'app-post-questions',
@@ -12,9 +11,60 @@ interface Tag {
 })
 export class PostQuestionsComponent implements OnInit {
   selectedSpecialist : string;
-  constructor() { }
+  form : FormGroup;
+  serverMessage : any;
+  loading = false;
+
+  constructor(private fb: FormBuilder, private service: ChatService) { }
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      subject : [ '', [Validators.required]],
+      tag : [ '', [Validators.required]],
+      msg : [ '', [Validators.required]]
+    });
+  }
+
+  async onSubmit(){
+    this.loading = true;
+    console.log("submit")
+    const data : postQ ={
+      reqTitle : this.subject?.value,
+      tag : this.tag?.value,
+      msg : [this.msg?.value],
+      members : [],
+      owner : "",
+      createdAt : Date.now(),
+      connStatus : false
+    }
+
+    try {
+      if(confirm("Are you sure?")) {
+        if (await this.service.sendQuestion(data)) {
+          this.subject?.reset(); 
+          this.msg?.reset();
+          this.tag?.reset();
+          alert("Successful");
+        }
+        
+      }
+    } catch (err) {
+      this.serverMessage = err;
+    }
+
+    this.loading = false;
+  }
+
+  get subject(){
+    return this.form.get('subject');
+  }
+
+  get tag(){
+    return this.form.get('tag');
+  }
+
+  get msg(){
+    return this.form.get('msg');
   }
 
   specialist: Tag[] = [
