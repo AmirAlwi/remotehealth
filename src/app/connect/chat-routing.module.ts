@@ -1,3 +1,4 @@
+import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { PostQuestionsComponent } from './post-questions/post-questions.component';
 import { ChatBoardListComponent } from './chat-board-list/chat-board-list.component';
 import { ConnectToPatientsComponent } from './connect-to-patients/connect-to-patients.component';
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'postquestions',
     component: PostQuestionsComponent
+  },
+  {
+    path: 'mngpatient',
+    component: ManagePatientComponent
   }
 ];
 

@@ -8,6 +8,10 @@ import { chatCredential, postQ } from './chat.model';
 import { arrayUnion } from 'firebase/firestore'
 import { combineLatest, Observable, of } from 'rxjs';
 
+interface patientListing{
+  name? : string,
+  uid? : string
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -142,5 +146,24 @@ export class ChatService {
       })
     );
   }
+  
+  //Manage patient service
+  /**
+   * get patient id
+   */
+   async getPatientList(){
+    const user = await this.gService.getUser();
+    return this.db.doc<any>(`patientCredential/${user.uid}`).valueChanges();
+  }
+
+  // getPatientList(){
+  //   return this.auth.authState.pipe(switchMap(user=>{
+  //     if (user){
+  //       return this.db.doc<patientListing[]>(`patientCredential/${user.uid}`).valueChanges();
+  //     } else {
+  //       return [];
+  //     }}));
+    
+  // }
 
 }

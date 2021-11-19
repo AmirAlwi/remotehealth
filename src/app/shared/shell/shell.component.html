@@ -35,7 +35,7 @@
                         <button mat-button routerLink="/connect/postquestions" style="width:190px;">
                             <span>❔ Post A Question</span>
                         </button>
-                        <button mat-button routerLink="/connect/patients" *ngIf="user?.roles?.physician" style="width:190px;"> 
+                        <button mat-button routerLink="/connect/mngpatient" *ngIf="user?.roles?.physician" style="width:190px;"> 
                         <span>🤒 Manage patient</span>
                         </button>
                         <button mat-button routerLink="/connect/findPatient" style="width:190px;" *ngIf="user?.roles?.physician">

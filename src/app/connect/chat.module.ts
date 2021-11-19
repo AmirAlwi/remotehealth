@@ -10,12 +10,14 @@ import { ChatSessionComponent } from './chat-session/chat-session.component';
 import { PostQuestionsComponent } from './post-questions/post-questions.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 @NgModule({
   declarations: [
     ChatBoardListComponent,
     ConnectToPatientsComponent,
     ChatSessionComponent,
     PostQuestionsComponent,
+    ManagePatientComponent,
   ],
   imports: [
     CommonModule,
