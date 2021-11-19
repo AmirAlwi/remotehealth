@@ -3,24 +3,30 @@ export interface chatCredential{
     connStatus?: boolean;
     createdAt?: number;
     reqTitle?: string;
+    tag? : string
+    msg? : message[];
     members?: string[];
     id?: string;
 }
 
 export interface postQ{
-    subject? : string;
-    tag? : string;
-    msg? : string[];
     owner?: string;
     connStatus?: boolean;
     createdAt?: number;
     reqTitle?: string;
+    tag? : string;
+    msg? : message[];
     members?: string[];
-    id?: string;
 }
 
 
 export interface Tag {
-    value: string; 
-    viewValue: string;
+    value? : string; 
+    viewValue? : string;
+  }
+
+  export interface message{
+      uid? : string,
+      content? : string,
+      createdAt? : number
   }

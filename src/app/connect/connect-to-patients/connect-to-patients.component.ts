@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class ConnectToPatientsComponent {
 
-  displayedColumns: string[] = ['owner', 'reqTitle', 'createdAt','id'];
+  displayedColumns: string[] = ['owner', 'reqTitle', 'tag', 'createdAt','id'];
   dataSource: MatTableDataSource<chatCredential>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

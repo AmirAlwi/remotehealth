@@ -31,16 +31,18 @@ export class PostQuestionsComponent implements OnInit {
     const data : postQ ={
       reqTitle : this.subject?.value,
       tag : this.tag?.value,
-      msg : [this.msg?.value],
       members : [],
+      msg : [],
       owner : "",
       createdAt : Date.now(),
       connStatus : false
     }
 
+    const msg = this.msg?.value;
+
     try {
       if(confirm("Are you sure?")) {
-        if (await this.service.sendQuestion(data)) {
+        if (await this.service.sendQuestion(data , msg)) {
           this.subject?.reset(); 
           this.msg?.reset();
           this.tag?.reset();

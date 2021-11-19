@@ -49,10 +49,15 @@ export class ChatService {
     return await this.db.doc(`chats/${docId}`).update(data);
   }
 
-  async sendQuestion (data : postQ){
+  async sendQuestion (data : postQ, msg : string){
     const user = await this.gService.getUser();
     data["members"]?.push(user.uid!)
-    data.owner = user.uid;
+    data.owner = user.fName;
+   // const { uid } = await this.gService.getUser();
+   const uid = user.uid;
+   const content = msg;
+    const createdAt = Date.now()
+    data["msg"]?.push({uid, content, createdAt});
     return await this.db.collection(`chats`).add(data);
   }
 
