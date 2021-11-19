@@ -14,7 +14,6 @@ export class ProfileSetupComponent implements OnInit {
   serverMessage: any;
   loading = false;
   constructor(private fb : FormBuilder, private servU : UserService, private router : Router) { }
-  test : any;
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -24,7 +23,7 @@ export class ProfileSetupComponent implements OnInit {
       birthdate: ['', [Validators.required]],
       height : ['' , [Validators.required]],
       weight: ['', [Validators.required,Validators.pattern("^[0-9]+(.[0-9]{0,2})?$")]]
-    })
+    });
   }
 
   async onSubmit(){

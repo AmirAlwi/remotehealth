@@ -1,6 +1,8 @@
 <div class="chatSessionBoard">
 
-    <app-chat-session *ngFor="let session of chatSession" [session]=session (click)="chatWindows(session)"></app-chat-session>
+    <app-chat-session *ngFor="let session of chatSession" [session]=session (click)="chatWindows(session)">
+        <h4>&nbsp;{{session.reqTitle}}&nbsp;</h4>
+    </app-chat-session>
 
 </div>
 

@@ -1,1 +1,35 @@
-<p>post-questions works!</p>
+<mat-card class="Main_card">
+    <mat-card-header style="margin-left: 13%;">
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>Connect to a Doctor</mat-card-title>
+        <mat-card-subtitle>consult to a professional</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Title -->
+            <h4>Subject</h4>
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Subject</mat-label>
+                <input matInput autocomplete="off" formControlName="subject" type="text" />
+            </mat-form-field>
+            <!-- Tag -->
+            <h4>Speciality</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Doctor Speciality</mat-label>
+                <mat-select formControlName="tag" name="food">
+                    <mat-option *ngFor="let doc of specialist" [value]="doc.value">
+                        {{doc.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- description -->
+            <h4>Questions</h4>
+            <textarea matInput #message maxlength="256" placeholder="Message" style="resize: none; " formControlName="msg"></textarea>
+            <br>
+            <mat-hint> {{message.value.length}} / 256</mat-hint>
+            <br>
+            <br>
+            <button mat-flat-button color="primary" type="submit" style=" float: right; margin-right: 20%;">Send</button> <br>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -32,7 +32,9 @@ export class ShellComponent implements OnInit, OnDestroy {
      this.topNavTitle = "Login"
     }else if (this.router.url.includes('activity')) {
       this.topNavTitle = "Activity Log"
-    } else {
+    } else if (this.router.url.includes('findPatient')) {
+      this.topNavTitle = "Connect To Patient"
+    }else {
       this.topNavTitle = "Dashboard"
     }
   };
