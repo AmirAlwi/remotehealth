@@ -39,14 +39,33 @@ export class ChatService {
       }}));
   }
 
-  async acceptPatient(docId : string){
+  async acceptPatient(sessionId : string){
     const user = await this.gService.getUser();
     const data = {
       members: arrayUnion(user.uid),
       //dateAccept : Date.now(),
       connStatus: true
     } 
-    return await this.db.doc(`chats/${docId}`).update(data);
+    return await this.db.doc(`chats/${sessionId}`).update(data);
+  }
+
+  async storePatient (sessionId : string){
+    const patient =await this.db.doc<chatCredential>(`chats/${sessionId}`).valueChanges();
+    const user = await this.gService.getUser();
+    let patientID : string[] =[];
+    patient.subscribe(data=>{
+      patientID = data?.members!
+      for(let id of patientID ){       
+        if (id !=  user.uid){
+          const data = {
+            patients : arrayUnion(id)
+          }
+          return this.db.doc(`patientCredential/${user.uid}`).set(data, {merge:true});
+        }
+      }
+      return null;
+    });
+    
   }
 
   async sendQuestion (data : postQ, msg : string){

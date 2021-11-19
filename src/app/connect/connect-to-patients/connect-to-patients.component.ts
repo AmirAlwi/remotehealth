@@ -1,3 +1,4 @@
+import { GoogleSigninDirective } from './../../user/google-signin.directive';
 import { ChatService } from './../chat.service';
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
@@ -22,7 +23,7 @@ export class ConnectToPatientsComponent {
 
   sub: Subscription;
 
-  constructor( public cs : ChatService) {
+  constructor( public cs : ChatService, private gs : GoogleSigninDirective) {
     
   }
 
@@ -33,6 +34,8 @@ export class ConnectToPatientsComponent {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
+    const doctorUser = this.gs.getUser();
+    this.cs.getDispName
   }
 
   applyFilter(event: Event) {
@@ -47,6 +50,7 @@ export class ConnectToPatientsComponent {
   @Input() docId : string;
   acceptPatient(id : string){
     this.cs.acceptPatient(id); 
+    this.cs.storePatient(id);
   }
 
   ngOnDestroy() {
