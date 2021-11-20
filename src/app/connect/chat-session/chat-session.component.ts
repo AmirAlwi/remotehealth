@@ -1,5 +1,5 @@
+import { ConnectService } from './../connect.service';
 import { GoogleSigninDirective } from './../../user/google-signin.directive';
-import { ChatService } from './../chat.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -9,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ChatSessionComponent implements OnInit {
 
-  constructor(public chat: ChatService, public user : GoogleSigninDirective) { }
+  constructor(public chat: ConnectService, public user : GoogleSigninDirective) { }
   @Input() session: any;
   dispName : string;
   membersID : string[];

@@ -1,5 +1,4 @@
-import { User } from './../user/login-page/user';
-import { GoogleSigninDirective } from './../user/google-signin.directive';
+import { GoogleSigninDirective } from '../user/google-signin.directive';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
@@ -7,11 +6,16 @@ import { map, switchMap } from 'rxjs/operators';
 import { chatCredential, postQ } from './chat.model';
 import { arrayUnion } from 'firebase/firestore'
 import { combineLatest, Observable, of } from 'rxjs';
+import { User } from '../user/login-page/user';
 
+interface patientListing{
+  name? : string,
+  uid? : string
+}
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class ConnectService {
 
   constructor(private auth : AngularFireAuth, private db : AngularFirestore, private gService : GoogleSigninDirective) { }
 
@@ -39,14 +43,41 @@ export class ChatService {
       }}));
   }
 
-  async acceptPatient(docId : string){
+  async acceptPatient(sessionId : string){
     const user = await this.gService.getUser();
     const data = {
       members: arrayUnion(user.uid),
       //dateAccept : Date.now(),
       connStatus: true
     } 
-    return await this.db.doc(`chats/${docId}`).update(data);
+    return await this.db.doc(`chats/${sessionId}`).update(data);
+  }
+
+  async storePatient (sessionId : string){
+    const patient =await this.db.doc<chatCredential>(`chats/${sessionId}`).valueChanges();
+    const user = await this.gService.getUser();
+    let patientID : string[] =[];
+
+    patient.subscribe(data=>{
+      patientID = data?.members!
+      for(let id of patientID ){       
+        if (id !=  user.uid){
+          
+          this.db.doc<any>(`users/${id}`).valueChanges().subscribe( v =>{
+            const data = {
+              patients : arrayUnion({
+                uid : id,
+                name : v.fName + " " + v.lName
+              }),
+            }
+            return this.db.doc(`patientCredential/${user.uid}`).set(data, {merge:true});
+          });    
+          
+        }
+      }
+      return null;
+    });
+    
   }
 
   async sendQuestion (data : postQ, msg : string){
@@ -123,5 +154,26 @@ export class ChatService {
       })
     );
   }
-
+  
+  //Manage patient service
+/**
+ * 
+ * @returns PatientList
+ */
+   async getPatientList(){
+    const user = await this.gService.getUser();
+    return this.db.doc<any>(`patientCredential/${user.uid}`).valueChanges();
+  }
+ /**
+  * @param patient_uid 
+  * @returns obsevable profile document
+  */
+  getProfile(patId : string){
+    return this.db.doc<any>(`users/${patId}`).valueChanges();
+  }
+  
+  getActivityLog(patId : string){
+    return this.db.collection<chatCredential>('activity',ref =>
+    ref.where('uid', '==', patId)).valueChanges({idField : 'id'});
+  }
 }

@@ -10,12 +10,18 @@ import { ChatSessionComponent } from './chat-session/chat-session.component';
 import { PostQuestionsComponent } from './post-questions/post-questions.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ManagePatientComponent } from './manage-patient/manage-patient.component';
+import { PatCredentialComponent } from './pat-credential/pat-credential.component';
+import { PatLogComponent } from './pat-log/pat-log.component';
 @NgModule({
   declarations: [
     ChatBoardListComponent,
     ConnectToPatientsComponent,
     ChatSessionComponent,
     PostQuestionsComponent,
+    ManagePatientComponent,
+    PatCredentialComponent,
+    PatLogComponent,
   ],
   imports: [
     CommonModule,

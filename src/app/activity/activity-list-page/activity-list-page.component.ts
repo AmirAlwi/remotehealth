@@ -67,7 +67,8 @@ export class ActivityListPageComponent implements OnInit  {
       this.title = this.data.title;
       this.notes = this.data.notes;
 
-      this.activityDate = Date.parse(this.service.toDate(this.data.date.toString()));
+      // this.activityDate = Date.parse(this.service.toDate(this.data.date.toString()));
+      this.activityDate = this.data.date;
       this.timeStart = Date.parse(this.service.toDateTime(this.data.time.starttime.toString()));
       this.timeEnd = Date.parse(this.service.toDateTime(this.data.time.endtime.toString()));
       this.timeInterval = this.service.getTimeInterval(this.data.time.starttime.toString(),this.timeStart,this.timeEnd);

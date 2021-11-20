@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.patList {
+    margin: 30px;
+    max-width: 20%;
+    display: flexbox;
+}
+
+table {
+    min-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+td:hover {
+    background-color: rgb(116, 115, 115);
+}
+
+.patCred {
+    margin: 30px;
+    min-width: 30%;
+    max-width: 30%;
+    min-height: 80%;
+    background-color: #424242;
+    border-radius: 5px;
+    display: flexbox;
+}
+
+.patLog {
+    margin: 30px;
+    flex-grow: 1;
+    min-height: 80%;
+    background-color: #424242;
+    border-radius: 5px;
+}
+
+.shadow {
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}

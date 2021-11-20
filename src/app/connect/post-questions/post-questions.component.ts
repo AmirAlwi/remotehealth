@@ -1,5 +1,5 @@
 import { postQ, Tag } from './../chat.model';
-import { ChatService } from './../chat.service';
+import { ConnectService } from '../connect.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { arrayUnion } from 'firebase/firestore'
@@ -15,7 +15,7 @@ export class PostQuestionsComponent implements OnInit {
   serverMessage : any;
   loading = false;
 
-  constructor(private fb: FormBuilder, private service: ChatService) { }
+  constructor(private fb: FormBuilder, private service: ConnectService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
