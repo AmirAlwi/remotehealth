@@ -18,7 +18,7 @@
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                 <h2>Name</h2>
                             </th>
-                            <td mat-cell *matCellDef="let row" (click)="test(row.uid)">{{ row.name}}</td>
+                            <td mat-cell *matCellDef="let row" (click)="showData(row.uid)">{{ row.name}}</td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -38,10 +38,10 @@
     </div>
 
     <div class="patCred shadow">
-        test
+        <app-pat-credential [patCred]="patCred"></app-pat-credential>
     </div>
 
     <div class="patLog shadow">
-        log
+        <app-pat-log *ngFor="let log of patLog" [patLog]=log></app-pat-log>
     </div>
 </div>

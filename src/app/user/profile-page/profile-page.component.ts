@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { User } from '../login-page/user';
 import { UserService } from '../user.service';
 import { GoogleSigninDirective } from '../google-signin.directive';
-import { DatePipe, formatDate } from '@angular/common';
-
 
 @Component({
   selector: 'app-profile-page',

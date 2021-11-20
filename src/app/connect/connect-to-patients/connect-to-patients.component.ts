@@ -1,5 +1,5 @@
+import { ConnectService } from './../connect.service';
 import { GoogleSigninDirective } from './../../user/google-signin.directive';
-import { ChatService } from './../chat.service';
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -23,7 +23,7 @@ export class ConnectToPatientsComponent {
 
   sub: Subscription;
 
-  constructor( public cs : ChatService, private gs : GoogleSigninDirective) {
+  constructor( public cs : ConnectService, private gs : GoogleSigninDirective) {
     
   }
 

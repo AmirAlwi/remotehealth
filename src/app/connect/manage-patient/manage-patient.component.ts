@@ -1,5 +1,6 @@
+import { activity } from './../../activity/activity.model';
 import { GoogleSigninDirective } from './../../user/google-signin.directive';
-import { ChatService } from './../chat.service';
+import { ConnectService } from '../connect.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,10 +21,12 @@ export class ManagePatientComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   patientList : string[];
-
-  sub: Subscription;
+  patCred : any;
+  patLog : activity[];
+  subCred: Subscription;
+  subLog: Subscription;
   
-  constructor(private cs: ChatService, private gs: GoogleSigninDirective) { }
+  constructor(private cs: ConnectService, private gs: GoogleSigninDirective) { }
    
 
   ngOnInit(): void {
@@ -47,8 +50,13 @@ export class ManagePatientComponent implements OnInit {
     }
   }
 
-  test(uid : string){
-    console.log(uid);
+  showData(uid : string){
+    this.subCred = this.cs.getProfile(uid).subscribe( data =>{
+      this.patCred = data;
+    });
+    this.subLog = this.cs.getActivityLog(uid).subscribe(
+      log => (this.patLog = log)
+    );
   }
 
 }

@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { PatCredentialComponent } from './pat-credential/pat-credential.component';
+import { PatLogComponent } from './pat-log/pat-log.component';
 @NgModule({
   declarations: [
     ChatBoardListComponent,
@@ -20,6 +21,7 @@ import { PatCredentialComponent } from './pat-credential/pat-credential.componen
     PostQuestionsComponent,
     ManagePatientComponent,
     PatCredentialComponent,
+    PatLogComponent,
   ],
   imports: [
     CommonModule,

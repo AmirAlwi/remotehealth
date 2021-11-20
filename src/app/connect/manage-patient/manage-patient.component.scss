@@ -21,10 +21,11 @@ td:hover {
 
 .patCred {
     margin: 30px;
-    min-width: 40%;
-    max-width: 40%;
+    min-width: 30%;
+    max-width: 30%;
     min-height: 80%;
     background-color: #424242;
+    border-radius: 5px;
     display: flexbox;
 }
 
@@ -33,6 +34,7 @@ td:hover {
     flex-grow: 1;
     min-height: 80%;
     background-color: #424242;
+    border-radius: 5px;
 }
 
 .shadow {

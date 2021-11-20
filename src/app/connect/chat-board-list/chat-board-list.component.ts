@@ -1,6 +1,5 @@
-
 import { Subscription, Observable } from 'rxjs';
-import { ChatService } from './../chat.service';
+import { ConnectService } from '../connect.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { chatCredential } from '../chat.model';
 
@@ -17,7 +16,7 @@ export class ChatBoardListComponent implements OnInit {
   chat$: Observable<any>;
   newMsg: any;
   @Input() data: any  ;
-  constructor(public cs: ChatService) { }
+  constructor(public cs: ConnectService) { }
 
   ngOnInit(): void {
     this.sub = this.cs.getMySession().subscribe(

@@ -1,5 +1,4 @@
-import { User } from './../user/login-page/user';
-import { GoogleSigninDirective } from './../user/google-signin.directive';
+import { GoogleSigninDirective } from '../user/google-signin.directive';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
@@ -7,6 +6,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { chatCredential, postQ } from './chat.model';
 import { arrayUnion } from 'firebase/firestore'
 import { combineLatest, Observable, of } from 'rxjs';
+import { User } from '../user/login-page/user';
 
 interface patientListing{
   name? : string,
@@ -15,7 +15,7 @@ interface patientListing{
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class ConnectService {
 
   constructor(private auth : AngularFireAuth, private db : AngularFirestore, private gService : GoogleSigninDirective) { }
 
@@ -156,13 +156,24 @@ export class ChatService {
   }
   
   //Manage patient service
-  /**
-   * get patient id
-   */
+/**
+ * 
+ * @returns PatientList
+ */
    async getPatientList(){
     const user = await this.gService.getUser();
     return this.db.doc<any>(`patientCredential/${user.uid}`).valueChanges();
   }
-
-
+ /**
+  * @param patient_uid 
+  * @returns obsevable profile document
+  */
+  getProfile(patId : string){
+    return this.db.doc<any>(`users/${patId}`).valueChanges();
+  }
+  
+  getActivityLog(patId : string){
+    return this.db.collection<chatCredential>('activity',ref =>
+    ref.where('uid', '==', patId)).valueChanges({idField : 'id'});
+  }
 }
