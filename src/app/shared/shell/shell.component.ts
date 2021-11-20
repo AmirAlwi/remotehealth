@@ -28,12 +28,20 @@ export class ShellComponent implements OnInit, OnDestroy {
 
    topNavTitle : any;
    handleRouteChange = () => {
-    if (this.router.url.includes('login')) {
-     this.topNavTitle = "Login"
-    }else if (this.router.url.includes('activity')) {
+     if (this.router.url.includes('activity')) {
       this.topNavTitle = "Activity Log"
     } else if (this.router.url.includes('findPatient')) {
       this.topNavTitle = "Connect To Patient"
+    } else if (this.router.url.includes('mngpatient')) {
+      this.topNavTitle = "Manage Patients"
+    } else if (this.router.url.includes('postquestions')) {
+      this.topNavTitle = "Post A Question"
+    } else if (this.router.url.includes('messages')) {
+      this.topNavTitle = "Messages"
+    } else if (this.router.url.includes('profile')) {
+      this.topNavTitle = "Profile"
+    } else if (this.router.url.includes('login')) {
+      this.topNavTitle = "Login"
     }else {
       this.topNavTitle = "Dashboard"
     }

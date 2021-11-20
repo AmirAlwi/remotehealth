@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges , ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { activity } from 'src/app/activity/activity.model';
   templateUrl: './pat-log.component.html',
   styleUrls: ['./pat-log.component.scss']
 })
-export class PatLogComponent implements OnInit {
+export class PatLogComponent implements OnChanges {
   @Input() patLog : any
   displayedColumns: string[] = ['title', 'notes', 'date'];
   dataSource: MatTableDataSource<string>;
@@ -18,12 +18,11 @@ export class PatLogComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   constructor() { }
 
-  ngOnInit(): void {
-    if ( this.patLog != null){
+  ngOnChanges(changes: SimpleChanges): void {
       this.dataSource = new MatTableDataSource(this.patLog);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    }
+     
   }
 
   applyFilter(event : Event){

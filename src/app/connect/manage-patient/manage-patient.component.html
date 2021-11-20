@@ -31,7 +31,7 @@
                         </tr>
                     </table>
 
-                    <mat-paginator [pageSizeOptions]="[13, 10, 20, 30]" aria-label="Select page of chatSessionList"></mat-paginator>
+                    <mat-paginator [pageSizeOptions]="[11, 15, 20, 30]" aria-label="Select page of chatSessionList"></mat-paginator>
                 </div>
             </mat-card-content>
         </mat-card>
@@ -42,6 +42,6 @@
     </div>
 
     <div class="patLog shadow">
-        <app-pat-log *ngFor="let log of patLog" [patLog]=log></app-pat-log>
+        <app-pat-log [patLog]="patLog"></app-pat-log>
     </div>
 </div>
