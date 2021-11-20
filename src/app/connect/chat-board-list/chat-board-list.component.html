@@ -15,8 +15,9 @@
                 <div class="user">
                     <img [src]="msg.user?.photoURL || 'assets/duck.svg'" width="40px">
                     <div><span>{{ msg.user?.fName }}</span></div>
-                </div>
 
+                </div>
+                <p>{{msg?.createdAt | date:'longDate'}}</p>
                 <p>{{ msg.content }}</p>
 
             </div>

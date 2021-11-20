@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-pat-credential',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PatCredentialComponent implements OnInit {
 
+  @Input() patCred : any;
+
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

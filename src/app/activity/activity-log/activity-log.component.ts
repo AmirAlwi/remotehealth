@@ -17,7 +17,8 @@ export class ActivityLogComponent implements OnInit {
   elapsedTime : any;
 
   ngOnInit(): void {
-    this.activityDate = Date.parse(this.service.toDate(this.board.date.toString()));
+    //this.activityDate = Date.parse(this.service.toDate(this.board.date.toString()));
+    this.activityDate = this.board.date;
     this.elapsedTime = this.getElapsed()
   }
 
