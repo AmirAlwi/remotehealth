@@ -36,11 +36,6 @@ export class ManagePatientComponent implements OnInit {
     }).catch((err) => {
       alert("load fail, please refresh page or check internet connection");
     });
-    // this.sub = this.cs.getPatientList().subscribe((list) =>{
-    //     this.dataSource = new MatTableDataSource(list.name);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.dataSource.sort = this.sort;
-    // })
   }
 
   applyFilter(event : Event){
@@ -50,6 +45,10 @@ export class ManagePatientComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  test(uid : string){
+    console.log(uid);
   }
 
 }

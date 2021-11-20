@@ -57,14 +57,22 @@ export class ChatService {
     const patient =await this.db.doc<chatCredential>(`chats/${sessionId}`).valueChanges();
     const user = await this.gService.getUser();
     let patientID : string[] =[];
+
     patient.subscribe(data=>{
       patientID = data?.members!
       for(let id of patientID ){       
         if (id !=  user.uid){
-          const data = {
-            patients : arrayUnion(id)
-          }
-          return this.db.doc(`patientCredential/${user.uid}`).set(data, {merge:true});
+          
+          this.db.doc<any>(`users/${id}`).valueChanges().subscribe( v =>{
+            const data = {
+              patients : arrayUnion({
+                uid : id,
+                name : v.fName + " " + v.lName
+              }),
+            }
+            return this.db.doc(`patientCredential/${user.uid}`).set(data, {merge:true});
+          });    
+          
         }
       }
       return null;
@@ -156,14 +164,5 @@ export class ChatService {
     return this.db.doc<any>(`patientCredential/${user.uid}`).valueChanges();
   }
 
-  // getPatientList(){
-  //   return this.auth.authState.pipe(switchMap(user=>{
-  //     if (user){
-  //       return this.db.doc<patientListing[]>(`patientCredential/${user.uid}`).valueChanges();
-  //     } else {
-  //       return [];
-  //     }}));
-    
-  // }
 
 }

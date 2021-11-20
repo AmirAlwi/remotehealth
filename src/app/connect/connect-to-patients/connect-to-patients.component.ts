@@ -34,8 +34,7 @@ export class ConnectToPatientsComponent {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-    const doctorUser = this.gs.getUser();
-    this.cs.getDispName
+
   }
 
   applyFilter(event: Event) {
