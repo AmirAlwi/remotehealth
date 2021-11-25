@@ -1,5 +1,5 @@
 import { ActivityFunctionService } from './../activity-function.service';
-import { AfterViewInit, Component, HostListener, OnInit, Input } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ActivitydbService } from '../activitydb.service';
@@ -7,18 +7,21 @@ import { activity } from './../activity.model'
 import { sensordata } from './../activity.model';
 
 import { Chart, registerables  } from 'chart.js';
+import * as math from 'mathjs';
+
 Chart.register(...registerables);
 
 
 @Component({
   selector: 'app-activity-list-page',
   templateUrl: './activity-list-page.component.html',
-  styleUrls: ['./activity-list-page.component.scss']
+  styleUrls: ['./activity-list-page.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ActivityListPageComponent implements OnInit  {
 
-  //real one
+  selectTab = 0;
   activityBoard : activity[];
   sub: Subscription;
 
@@ -58,6 +61,12 @@ export class ActivityListPageComponent implements OnInit  {
   timeInterval : string[];
   sensData : sensordata;
   temperature : number[];
+  heartRate : number[];
+
+  maxVal : number;
+  minVal : number;
+  stdVal : number;
+  medVal : number;
 
   showLogDetails(value: any){
     try {
@@ -76,7 +85,17 @@ export class ActivityListPageComponent implements OnInit  {
       this.sensData = this.data.sensordata;
       this.innitData();
 
-      this.testChart();
+     // this.testChart();
+      try {
+        this.hrChart();
+      } catch (error) {
+        console.log(error);
+      }
+    
+      this.maxVal = this.max;
+      this.minVal = this.min;
+      this.stdVal = this.standardDeviation;
+      this.medVal = this.median;
       
     } catch (error) {
       console.log(error);
@@ -95,61 +114,61 @@ export class ActivityListPageComponent implements OnInit  {
     //this.temperature = new Array(tempLength)
     
     this.temperature = temp;
+    this.heartRate = heartR;
   }
 
   public myChart: Chart
+  public chartHR: Chart
   //TODO : sync data with db
   //problem to take direct from activity type value
   testChart(){
     if (this.myChart) this.myChart.destroy();
-    const canvas = <HTMLCanvasElement> document.getElementById("myChart");
+    const canvas = <HTMLCanvasElement> document.getElementById("Temperature");
     canvas.width = 100;
     canvas.height = 25;
 
     const ctx = canvas.getContext('2d');
-     this.myChart = new Chart(canvas, {
-    type: 'line',
-    data: {
-        labels: this.timeInterval,
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 255, 255)',
-          data: this.temperature,
-          
-        }]
-    },
-    options: {
-      responsive: true,
-      //maintainAspectRatio: false,
+    this.myChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+          labels: this.timeInterval,
+          datasets: [{
+            label: 'Temperature',
+            //backgroundColor: 'rgb(95, 242, 90)',
+            borderColor: 'rgb(255, 255, 255)',
+            data: this.temperature,
+            
+          }]
+      },
+      options: {
+        responsive: true,
+        //maintainAspectRatio: false,
         scales: {
-            y: {
-              ticks: {
-                color: "white", 
-                // font: {
-                //   size: 18, // 'size' now within object 'font {}'
-                // }  
-              },
-              min: 30 ,
-              beginAtZero: false
+          y: {
+            ticks: {
+              color: "white", 
+              // font: {
+              //   size: 18, // 'size' now within object 'font {}'
+              // }  
             },
-            x: {  
-              ticks: {
-                color: "white",  
-                // font: {
-                //   size: 14 // 'size' now within object 'font {}'
-                // }
-                autoSkip: true,
-                maxTicksLimit: 21
-              },
-              beginAtZero: true,
-              
-              grid:{
-                color:"white"
-              }
-          }
+            min: 30 ,
+            beginAtZero: false
+          },
+          x: {  
+            ticks: {
+              color: "white",  
+              // font: {
+              //   size: 14 // 'size' now within object 'font {}'
+              // }
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
             
-            
+            grid:{
+              color:"white"
+            }
+          }    
         },
         plugins: {  // 'legend' now within object 'plugins {}'
           legend: {
@@ -162,12 +181,119 @@ export class ActivityListPageComponent implements OnInit  {
             }
           }
         },
-    }
-
-});
+        elements: {
+          point: {
+            radius: this.adjustRadiusBasedOnData,
+            backgroundColor : this.adjustBackgroundColor,
+          }
+        }
+      },
+    });
   }
 
+  hrChart(){
+    if (this.chartHR) this.chartHR.destroy();
+    const canvasHR = <HTMLCanvasElement> document.getElementById("heartRate");
+    canvasHR.width = 100;
+    canvasHR.height = 25;
+
+    const ctx = canvasHR.getContext('2d');
+    this.myChart = new Chart(canvasHR, {
+      type: 'line',
+      data: {
+          labels: this.timeInterval,
+          datasets: [{
+            label: 'Heart Rate',
+            backgroundColor: 'rgb(95, 242, 90)',
+            borderColor: 'rgb(255, 255, 255)',
+            data: this.heartRate,
+            
+          }]
+      },
+      options: {
+        responsive: true,
+        //maintainAspectRatio: false,
+        scales: {
+          y: {
+            ticks: {
+              color: "white", 
+              // font: {
+              //   size: 18, // 'size' now within object 'font {}'
+              // }  
+            },
+            min: 30 ,
+            beginAtZero: false
+          },
+          x: {  
+            ticks: {
+              color: "white",  
+              // font: {
+              //   size: 14 // 'size' now within object 'font {}'
+              // }
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+            
+            grid:{
+              color:"white"
+            }
+          }    
+        },
+        plugins: {  // 'legend' now within object 'plugins {}'
+          legend: {
+            labels: {
+              color: "white",  // not 'fontColor:' anymore
+              // fontSize: 18  // not 'fontSize:' anymore
+              font: {
+                size: 12 // 'size' now within object 'font {}'
+              }
+            }
+          }
+        },
+        elements: {
+          point: {
+            // radius: this.adjustRadiusBasedOnDataHR,
+            // backgroundColor : this.adjustBackgroundColorHR,
+          }
+        }
+      },
+    });
+  }
+
+  adjustRadiusBasedOnData(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 5
+      : v < 36 ? 5
+      : 5;
+  }
+
+  adjustBackgroundColor(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 'rgb(255, 99, 132)'
+      : v < 36 ? 'rgb(255, 99, 132)'
+      : 'rgb(95, 242, 90)'
+  }
+
+
+
+  get max() {
+    return Math.max(...this.heartRate);
+  }
+  
+  get min() {
+    return Math.min(...this.heartRate);
+  }
+
+  get median() {
+    return math.median(this.heartRate);
+  }
+
+  get standardDeviation() {
+    return math.std(this.heartRate);
+  }
+
+
+
 }
-
-
 

@@ -24,6 +24,7 @@
     "ajv-keywords": "^3.5.2",
     "chart.js": "^3.5.1",
     "firebase": "^9.1.0",
+    "mathjs": "^10.0.0",
     "rxfire": "^6.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
