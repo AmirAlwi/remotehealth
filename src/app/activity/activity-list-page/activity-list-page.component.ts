@@ -9,6 +9,7 @@ import { sensordata } from './../activity.model';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+
 import * as math from 'mathjs';
 
 Chart.register(...registerables);
@@ -72,8 +73,8 @@ export class ActivityListPageComponent implements OnInit {
   stdVal: number;
   medVal: number;
 
-  min_thresh: any ;
-  max_thresh: any ;
+  min_thresh: any;
+  max_thresh: any;
 
   showLogDetails(value: any) {
     try {
@@ -122,7 +123,7 @@ export class ActivityListPageComponent implements OnInit {
 
     if ($event.index == 0) {
       this.min_thresh = 37.5;
-      this.max_thresh =36;
+      this.max_thresh = 36;
       try {
         this.chartDisplay(this.temperature, "temperature");
       } catch (error) {
@@ -136,7 +137,7 @@ export class ActivityListPageComponent implements OnInit {
 
     } else if ($event.index == 1) {
       this.min_thresh = 40;
-      this.max_thresh =255;
+      this.max_thresh = 255;
       try {
         this.chartDisplay(this.heartRate, "heartRate");
       } catch (error) {
@@ -149,8 +150,14 @@ export class ActivityListPageComponent implements OnInit {
       this.medVal = this.medianHR;
 
     } else if ($event.index == 2) {
+
+      this.maxVal = this.maxOx;
+      this.minVal = this.minOx;
+      this.stdVal = this.stdOx;
+      this.medVal = this.medianOx;
+
       this.min_thresh = 90;
-      this.max_thresh =100;
+      this.max_thresh = 100;
       try {
         this.chartDisplay(this.oxygen, "oxy");
       } catch (error) {
@@ -168,7 +175,7 @@ export class ActivityListPageComponent implements OnInit {
   chartDisplay(dataset: any[], id: string) {
 
     const canvas = <HTMLCanvasElement>document.getElementById(id);
-    
+
     const hrLimit: any = {
       annotations: {
         line1: {
@@ -202,108 +209,124 @@ export class ActivityListPageComponent implements OnInit {
         }]
       },
       options: {
-        responsive: true,
-        scales: {
-          y: {
-            ticks: {
-              color: "white",
-            },
-            suggestedMin: 90,
-            beginAtZero: false
+      responsive: true,
+      scales: {
+        y: {
+          ticks: {
+            color: "white",
           },
-          x: {
-            display: true,
-            ticks: {
-              color: "white",
-              autoSkip: true,
-              maxTicksLimit: 21
-            },
-            beginAtZero: true,
+          suggestedMin: 90,
+          suggestedMax : 40,
+          beginAtZero: false
+        },
+        x: {
+          display: true,
+          ticks: {
+            color: "white",
+            autoSkip: true,
+            maxTicksLimit: 21
+          },
+          beginAtZero: true,
 
-            grid: {
-              color: "white"
-            }
+          grid: {
+            color: "white"
           }
-        },
-        plugins: {
-          legend: {
-            labels: {
-              color: "white",
-              font: {
-                size: 12
-              }
-            }
-          },
-          decimation: {
-            enabled: true,
-            algorithm: 'lttb', samples: 1000
-          },
-          annotation: hrLimit
-        },
-        elements: {
-          point: {
-            // radius: this.adjustRadiusBasedOnData,
-            // backgroundColor : this.adjustBackgroundColorHR,
-            radius: 0,
-          }
-        },
+        }
       },
+      plugins: {
+        legend: {
+          labels: {
+            color: "white",
+            font: {
+              size: 12
+            }
+          }
+        },
+        decimation: {
+          enabled: true,
+          algorithm: 'lttb', samples: 1000
+        },
+        annotation: hrLimit,
+        
+      },
+      elements: {
+        point: {
+          // radius: this.adjustRadiusBasedOnData,
+          // backgroundColor : this.adjustBackgroundColorHR,
+          radius: 0,
+        }
+      },
+    },
     });
 
-    
-  }
 
-  
+}
 
-  adjustRadiusBasedOnData(ctx: any) {
-    const v = ctx.parsed.y;
-    return v > 37 ? 5
-      : v < 36 ? 5
-        : 5;
-  }
 
-  adjustBackgroundColor(ctx: any) {
-    const v = ctx.parsed.y;
-    return v > 37 ? 'rgb(255, 99, 132)'
-      : v < 36 ? 'rgb(255, 99, 132)'
-        : 'rgb(95, 242, 90)'
-  }
+
+adjustRadiusBasedOnData(ctx: any) {
+  const v = ctx.parsed.y;
+  return v > 37 ? 5
+    : v < 36 ? 5
+      : 5;
+}
+
+adjustBackgroundColor(ctx: any) {
+  const v = ctx.parsed.y;
+  return v > 37 ? 'rgb(255, 99, 132)'
+    : v < 36 ? 'rgb(255, 99, 132)'
+      : 'rgb(95, 242, 90)'
+}
 
 
 
   get maxHR() {
-    return Math.max(...this.heartRate);
-  }
+  return Math.max(...this.heartRate);
+}
 
   get minHR() {
-    return Math.min(...this.heartRate);
-  }
+  return Math.min(...this.heartRate);
+}
 
   get medianHR() {
-    return math.median(this.heartRate);
-  }
+  return math.median(this.heartRate);
+}
 
   get stdHR() {
-    return math.std(this.heartRate);
-  }
+  return math.std(this.heartRate);
+}
 
   get maxTemp() {
-    return Math.max(...this.temperature);
-  }
+  return Math.max(...this.temperature);
+}
 
   get minTemp() {
-    return Math.min(...this.temperature);
-  }
+  return Math.min(...this.temperature);
+}
 
   get medianTemp() {
-    return math.median(this.temperature);
-  }
+  return math.median(this.temperature);
+}
 
   get stdTemp() {
-    return math.std(this.temperature);
-  }
+  return math.std(this.temperature);
+}
 
+get maxOx() {
+  return Math.max(...this.oxygen);
+}
 
+  get minOx() {
+  return Math.min(...this.oxygen);
+}
+
+  get medianOx() {
+  return math.median(this.oxygen);
+}
+
+  get stdOx() {
+  return math.std(this.oxygen);
+}
 
 }
 
