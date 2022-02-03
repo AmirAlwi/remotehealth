@@ -37,32 +37,31 @@ export class ActivityFunctionService {
     return longDate;
   }
 
-  getTimeInterval(input : string, start : any , end: any){
-    const time = parseInt(input.slice(9,13));
-    let refTime = time;
+  getTimeInterval(interval : any ){
 
-    const diff = ((end- start)/(1000 * 3600)*60);
-    const numb = new Array<number>(diff);
+    interval = interval/1000;
+  
+    const numb = new Array<number>(interval);
     let stringNumb : string[] = new Array(numb.length);
     let j = 0;
 
-    for(let i = 0;i<=diff;i++){ 
-      if(i % 60 !=0){
+    for(let i = 0;i<=interval;i++){ 
+      // if(i % 60 !=0){
         j++
-        numb[i]= refTime + j; 
+        numb[i]=  + j; 
         stringNumb[i] = numb[i].toString();
 
         stringNumb[i] = ('0000'+ stringNumb[i]).slice(-4)
 
-      } else{
-        numb[i]= time + ((i/60)*100);
-        stringNumb[i] = numb[i].toString();
+      // } else{
+      //   numb[i]= time + ((i/60)*100);
+      //   stringNumb[i] = numb[i].toString();
 
-        stringNumb[i] = ('0000'+ stringNumb[i]).slice(-4)
+      //   stringNumb[i] = ('0000'+ stringNumb[i]).slice(-4)
 
-        refTime = time + (i/60)*100;
-        j = 0;
-      }
+      //   refTime = time + (i/60)*100;
+      //   j = 0;
+      // }
     }
     return stringNumb 
   }  
