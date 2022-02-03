@@ -62,6 +62,7 @@ export class ActivityListPageComponent implements OnInit {
   sensData: sensordata;
   temperature: number[];
   heartRate: number[];
+  oxygen: number[];
 
   maxVal: number;
   minVal: number;
@@ -86,58 +87,88 @@ export class ActivityListPageComponent implements OnInit {
       this.innitData();
 
       // this.testChart();
-      try {
-        this.hrChart();
-      } catch (error) {
-        console.log(error);
-      }
 
-      this.maxVal = this.max;
-      this.minVal = this.min;
-      this.stdVal = this.standardDeviation;
-      this.medVal = this.median;
 
     } catch (error) {
       console.log(error);
     }
   }
 
+  
   innitData() {
     let tempLength = this.sensData.temperature!.length;
     let heartLength = this.sensData.heartrate!.length;
     let oxyLength = this.sensData.oximeter!.length;
-
+    
     const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
     const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
     const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
-
+    
     //this.temperature = new Array(tempLength)
-    console.log(heartLength);
     this.temperature = temp;
     this.heartRate = heartR;
+    this.oxygen = oxy;
   }
 
-  public myChart: Chart
-  public chartHR: Chart
+  dispTable($event: any) {
+    if (this.chart) this.chart.destroy();
+    console.log("event index" + $event.index);
+
+    if ($event.index ==0) {
+
+      try {
+        this.chartDisplay(this.temperature, "temperature");
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.maxVal = this.maxTemp;
+      this.minVal = this.minTemp;
+      this.stdVal = this.stdTemp;
+      this.medVal = this.medianTemp;
+
+    }else if($event.index ==1){
+
+      try {
+        this.chartDisplay(this.heartRate, "heartRate");
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.maxVal = this.maxHR;
+      this.minVal = this.minHR;
+      this.stdVal = this.stdHR;
+      this.medVal = this.medianHR;
+
+    }else if($event.index == 2){
+
+      try {
+        this.chartDisplay(this.oxygen, "oxy");
+      } catch (error) {
+        
+      }
+    }
+
+  }
+
+  public chart: Chart;
+  public chartTemp : Chart;
   //TODO : sync data with db
   //problem to take direct from activity type value
-  
-  hrChart() {
-    if (this.chartHR) this.chartHR.destroy();
-    const canvasHR = <HTMLCanvasElement>document.getElementById("heartRate");
 
-    const ctx = canvasHR.getContext('2d');
-      
-    this.chartHR = new Chart(ctx!, {
+  chartDisplay(dataset : any[], id : string) {
+
+    const canvas = <HTMLCanvasElement>document.getElementById(id);
+
+    this.chart = new Chart(canvas, {
       type: 'line',
       data: {
         labels: this.timeInterval,
         datasets: [{
-          label: 'Heart Rate',
           backgroundColor: 'rgb(95, 242, 90)',
           borderColor: 'rgb(255, 255, 255)',
-          data: this.temperature,
-          
+          data: dataset,
+          tension:0.3,
         }]
       },
       options: {
@@ -152,7 +183,7 @@ export class ActivityListPageComponent implements OnInit {
               // }  
 
             },
-            min: 35,
+            suggestedMin:90,
             beginAtZero: false
           },
           x: {
@@ -191,13 +222,14 @@ export class ActivityListPageComponent implements OnInit {
           point: {
             // radius: this.adjustRadiusBasedOnDataHR,
             // backgroundColor : this.adjustBackgroundColorHR,
-            radius: 0
+            radius: 0,
           }
-        }
+        },
       },
     });
-  
+
   }
+
 
   adjustRadiusBasedOnData(ctx: any) {
     const v = ctx.parsed.y;
@@ -215,20 +247,36 @@ export class ActivityListPageComponent implements OnInit {
 
 
 
-  get max() {
+  get maxHR() {
     return Math.max(...this.heartRate);
   }
 
-  get min() {
+  get minHR() {
     return Math.min(...this.heartRate);
   }
 
-  get median() {
+  get medianHR() {
     return math.median(this.heartRate);
   }
 
-  get standardDeviation() {
+  get stdHR() {
     return math.std(this.heartRate);
+  }
+
+  get maxTemp() {
+    return Math.max(...this.temperature);
+  }
+
+  get minTemp() {
+    return Math.min(...this.temperature);
+  }
+
+  get medianTemp() {
+    return math.median(this.temperature);
+  }
+
+  get stdTemp() {
+    return math.std(this.temperature);
   }
 
 

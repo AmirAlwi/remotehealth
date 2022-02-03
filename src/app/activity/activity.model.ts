@@ -18,8 +18,8 @@ export interface sensordata{
     temperature? : number[];
     oximeter?: number[];
     bloodpressure? : bloodpressure;
-    accelerometer? : threedimentionalvalue;
-    gyroscope? : threedimentionalvalue;
+    // accelerometer? : threedimentionalvalue;
+    // gyroscope? : threedimentionalvalue;
 }
 
 export interface threedimentionalvalue {
