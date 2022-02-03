@@ -1,3 +1,4 @@
+import { ChartConfiguration } from './../../../../node_modules/chart.js/types/index.esm.d';
 import { ActivityFunctionService } from './../activity-function.service';
 import { AfterViewInit, Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
@@ -7,10 +8,12 @@ import { activity } from './../activity.model'
 import { sensordata } from './../activity.model';
 
 import { Chart, registerables } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import * as math from 'mathjs';
 
 Chart.register(...registerables);
 
+Chart.register(annotationPlugin);
 
 @Component({
   selector: 'app-activity-list-page',
@@ -69,6 +72,9 @@ export class ActivityListPageComponent implements OnInit {
   stdVal: number;
   medVal: number;
 
+  min_thresh: any ;
+  max_thresh: any ;
+
   showLogDetails(value: any) {
     try {
       this.isDisplayed = true
@@ -94,16 +100,16 @@ export class ActivityListPageComponent implements OnInit {
     }
   }
 
-  
+
   innitData() {
     let tempLength = this.sensData.temperature!.length;
     let heartLength = this.sensData.heartrate!.length;
     let oxyLength = this.sensData.oximeter!.length;
-    
+
     const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
     const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
     const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
-    
+
     //this.temperature = new Array(tempLength)
     this.temperature = temp;
     this.heartRate = heartR;
@@ -114,8 +120,9 @@ export class ActivityListPageComponent implements OnInit {
     if (this.chart) this.chart.destroy();
     console.log("event index" + $event.index);
 
-    if ($event.index ==0) {
-
+    if ($event.index == 0) {
+      this.min_thresh = 37.5;
+      this.max_thresh =36;
       try {
         this.chartDisplay(this.temperature, "temperature");
       } catch (error) {
@@ -127,8 +134,9 @@ export class ActivityListPageComponent implements OnInit {
       this.stdVal = this.stdTemp;
       this.medVal = this.medianTemp;
 
-    }else if($event.index ==1){
-
+    } else if ($event.index == 1) {
+      this.min_thresh = 40;
+      this.max_thresh =255;
       try {
         this.chartDisplay(this.heartRate, "heartRate");
       } catch (error) {
@@ -140,25 +148,47 @@ export class ActivityListPageComponent implements OnInit {
       this.stdVal = this.stdHR;
       this.medVal = this.medianHR;
 
-    }else if($event.index == 2){
-
+    } else if ($event.index == 2) {
+      this.min_thresh = 90;
+      this.max_thresh =100;
       try {
         this.chartDisplay(this.oxygen, "oxy");
       } catch (error) {
-        
+
       }
     }
 
   }
 
   public chart: Chart;
-  public chartTemp : Chart;
+  public chartTemp: Chart;
   //TODO : sync data with db
   //problem to take direct from activity type value
 
-  chartDisplay(dataset : any[], id : string) {
+  chartDisplay(dataset: any[], id: string) {
 
     const canvas = <HTMLCanvasElement>document.getElementById(id);
+    
+    const hrLimit: any = {
+      annotations: {
+        line1: {
+          type: 'line',
+          yMin: this.min_thresh,
+          yMax: this.min_thresh,
+          borderColor: 'rgb(95, 242, 90)',
+          borderWidth: 3,
+          drawTime: "afterDatasetsDraw",
+        },
+        line2: {
+          type: 'line',
+          yMin: this.max_thresh,
+          yMax: this.max_thresh,
+          borderColor: 'rgb(95, 242, 90)',
+          borderWidth: 3,
+          drawTime: "afterDatasetsDraw"
+        }
+      }
+    }
 
     this.chart = new Chart(canvas, {
       type: 'line',
@@ -168,31 +198,23 @@ export class ActivityListPageComponent implements OnInit {
           backgroundColor: 'rgb(95, 242, 90)',
           borderColor: 'rgb(255, 255, 255)',
           data: dataset,
-          tension:0.3,
+          tension: 0.3,
         }]
       },
       options: {
         responsive: true,
-        //maintainAspectRatio: false,
         scales: {
           y: {
             ticks: {
               color: "white",
-              // font: {
-              //   size: 18, // 'size' now within object 'font {}'
-              // }  
-
             },
-            suggestedMin:90,
+            suggestedMin: 90,
             beginAtZero: false
           },
           x: {
             display: true,
             ticks: {
               color: "white",
-              // font: {
-              //   size: 14 // 'size' now within object 'font {}'
-              // }
               autoSkip: true,
               maxTicksLimit: 21
             },
@@ -203,24 +225,24 @@ export class ActivityListPageComponent implements OnInit {
             }
           }
         },
-        plugins: {  // 'legend' now within object 'plugins {}'
+        plugins: {
           legend: {
             labels: {
-              color: "white",  // not 'fontColor:' anymore
-              // fontSize: 18  // not 'fontSize:' anymore
+              color: "white",
               font: {
-                size: 12 // 'size' now within object 'font {}'
+                size: 12
               }
             }
           },
           decimation: {
             enabled: true,
             algorithm: 'lttb', samples: 1000
-          }
+          },
+          annotation: hrLimit
         },
         elements: {
           point: {
-            // radius: this.adjustRadiusBasedOnDataHR,
+            // radius: this.adjustRadiusBasedOnData,
             // backgroundColor : this.adjustBackgroundColorHR,
             radius: 0,
           }
@@ -228,8 +250,10 @@ export class ActivityListPageComponent implements OnInit {
       },
     });
 
+    
   }
 
+  
 
   adjustRadiusBasedOnData(ctx: any) {
     const v = ctx.parsed.y;
