@@ -1,67 +1,85 @@
 import { ActivityFunctionService } from './../activity-function.service';
-import { AfterViewInit, Component, HostListener, OnInit, Input } from '@angular/core';
+import { Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ActivitydbService } from '../activitydb.service';
 import { activity } from './../activity.model'
 import { sensordata } from './../activity.model';
 
-import { Chart, registerables  } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
+
+import * as math from 'mathjs';
+
 Chart.register(...registerables);
 
+Chart.register(annotationPlugin);
 
 @Component({
   selector: 'app-activity-list-page',
   templateUrl: './activity-list-page.component.html',
-  styleUrls: ['./activity-list-page.component.scss']
+  styleUrls: ['./activity-list-page.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
-export class ActivityListPageComponent implements OnInit  {
+export class ActivityListPageComponent implements OnInit {
 
-  //real one
-  activityBoard : activity[];
+  selectTab = 0;
+  activityBoard: activity[];
   sub: Subscription;
 
-  constructor( public xtvtdb : ActivitydbService, public service : ActivityFunctionService) {}
-  
+  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService) { }
+
   innerHeight: any;
   @HostListener('window:resize', ['$event'])
   onResize() {
-  this.innerHeight = window.innerHeight;
+    this.innerHeight = window.innerHeight;
   }
 
   ngOnInit(): void {
     this.innerHeight = window.innerHeight;
-    
+
     this.sub = this.xtvtdb.getAcitivtyLog()
-    .subscribe(log => (this.activityBoard = log));
-    
+      .subscribe(log => (this.activityBoard = log));
+
     this.isDisplayed = false
 
-    
+
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
-  isDisplayed : boolean = false;
+  isDisplayed: boolean = false;
 
-  @Input() data: any  ;
+  @Input() data: any;
 
-  title:string;
-  notes : string;
+  title: string;
+  notes: string;
 
-  activityDate : any;
+  activityDate: any;
   timeStart: any;
-  timeEnd : any;
+  timeEnd: any;
 
-  timeInterval : string[];
-  sensData : sensordata;
-  temperature : number[];
+  timeInterval: string[];
+  sensData: sensordata;
+  temperature: number[];
+  heartRate: number[];
+  oxygen: number[];
+  bpLower :number = 0;
+  bpUpper :number = 0;
 
-  showLogDetails(value: any){
+  maxVal: number;
+  minVal: number;
+  stdVal: number;
+  medVal: number;
+
+  min_thresh: any;
+  max_thresh: any;
+
+  showLogDetails(value: any) {
     try {
-      this.isDisplayed= true
+      this.isDisplayed = true
       this.data = value;
 
       this.title = this.data.title;
@@ -69,105 +87,325 @@ export class ActivityListPageComponent implements OnInit  {
 
       // this.activityDate = Date.parse(this.service.toDate(this.data.date.toString()));
       this.activityDate = this.data.date;
-      this.timeStart = Date.parse(this.service.toDateTime(this.data.time.starttime.toString()));
-      this.timeEnd = Date.parse(this.service.toDateTime(this.data.time.endtime.toString()));
-      this.timeInterval = this.service.getTimeInterval(this.data.time.starttime.toString(),this.timeStart,this.timeEnd);
-
+      this.timeStart = this.data.time.starttime;
+      this.timeEnd = this.data.time.endtime;
+      // this.timeInterval = JSON.parse(JSON.stringify(this.timeEnd-this.timeStart));
+      this.timeInterval = this.service.getTimeInterval(this.timeEnd - this.timeStart);
       this.sensData = this.data.sensordata;
       this.innitData();
 
-      this.testChart();
-      
+      // this.testChart();
+
+
     } catch (error) {
       console.log(error);
     }
   }
 
-  innitData(){
-    let tempLength = this.sensData.temperature!.length;
-    let heartLength = this.sensData.heartrate!.length;
-    let oxyLength = this.sensData.oximeter!.length;
+
+  innitData() {
 
     const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
     const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
     const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
-
-    //this.temperature = new Array(tempLength)
+    const bpupper = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.upper));
+    const bplower = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.lower));
     
     this.temperature = temp;
+    this.heartRate = heartR;
+    this.oxygen = oxy;
+    this.bpLower = bplower;
+    this.bpUpper = bpupper;
+    
+    if (this.chart) this.chart.destroy();
+    this.chartAll();
   }
 
-  public myChart: Chart
+  dispTable($event: any) {
+    if (this.chart) this.chart.destroy();
+    console.log("event index" + $event.index);
+
+    if ($event.index == 1) {
+      this.min_thresh = 37.5;
+      this.max_thresh = 36;
+      try {
+        this.chartDisplay(this.temperature, "temperature");
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.maxVal = this.maxTemp;
+      this.minVal = this.minTemp;
+      this.stdVal = this.stdTemp;
+      this.medVal = this.medianTemp;
+
+    } else if ($event.index == 2) {
+      this.min_thresh = 40;
+      this.max_thresh = 255;
+      try {
+        this.chartDisplay(this.heartRate, "heartRate");
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.maxVal = this.maxHR;
+      this.minVal = this.minHR;
+      this.stdVal = this.stdHR;
+      this.medVal = this.medianHR;
+
+    } else if ($event.index == 3) {
+
+      this.maxVal = this.maxOx;
+      this.minVal = this.minOx;
+      this.stdVal = this.stdOx;
+      this.medVal = this.medianOx;
+
+      this.min_thresh = 90;
+      this.max_thresh = 100;
+      try {
+        this.chartDisplay(this.oxygen, "oxy");
+      } catch (error) {
+
+      }
+    } else if ($event.index == 0){
+      try{
+        this.chartAll();
+      } catch(error){
+
+      }
+    }
+
+  }
+
+  public chart: Chart;
+  public chartTemp: Chart;
   //TODO : sync data with db
   //problem to take direct from activity type value
-  testChart(){
-    if (this.myChart) this.myChart.destroy();
-    const canvas = <HTMLCanvasElement> document.getElementById("myChart");
-    canvas.width = 100;
-    canvas.height = 25;
 
-    const ctx = canvas.getContext('2d');
-     this.myChart = new Chart(canvas, {
-    type: 'line',
-    data: {
+  chartDisplay(dataset: any[], id: string) {
+
+    const canvas = <HTMLCanvasElement>document.getElementById(id);
+
+    const hrLimit: any = {
+      annotations: {
+        line1: {
+          type: 'line',
+          yMin: this.min_thresh,
+          yMax: this.min_thresh,
+          borderColor: 'rgb(95, 242, 90)',
+          borderWidth: 3,
+          drawTime: "afterDatasetsDraw",
+        },
+        line2: {
+          type: 'line',
+          yMin: this.max_thresh,
+          yMax: this.max_thresh,
+          borderColor: 'rgb(95, 242, 90)',
+          borderWidth: 3,
+          drawTime: "afterDatasetsDraw"
+        }
+      }
+    }
+
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
         labels: this.timeInterval,
         datasets: [{
-          label: 'My First dataset',
-          backgroundColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgb(95, 242, 90)',
           borderColor: 'rgb(255, 255, 255)',
-          data: this.temperature,
+          data: dataset,
+          tension: 0.3,
           
         }]
-    },
-    options: {
-      responsive: true,
-      //maintainAspectRatio: false,
+      },
+      options: {
+        responsive: true,
         scales: {
-            y: {
-              ticks: {
-                color: "white", 
-                // font: {
-                //   size: 18, // 'size' now within object 'font {}'
-                // }  
-              },
-              min: 30 ,
-              beginAtZero: false
+          y: {
+            ticks: {
+              color: "white",
             },
-            x: {  
-              ticks: {
-                color: "white",  
-                // font: {
-                //   size: 14 // 'size' now within object 'font {}'
-                // }
-                autoSkip: true,
-                maxTicksLimit: 21
-              },
-              beginAtZero: true,
-              
-              grid:{
-                color:"white"
-              }
-          }
-            
-            
-        },
-        plugins: {  // 'legend' now within object 'plugins {}'
-          legend: {
-            labels: {
-              color: "white",  // not 'fontColor:' anymore
-              // fontSize: 18  // not 'fontSize:' anymore
-              font: {
-                size: 12 // 'size' now within object 'font {}'
-              }
+            suggestedMin: 90,
+            suggestedMax: 40,
+            beginAtZero: false
+          },
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+
+            grid: {
+              color: "white"
             }
           }
         },
-    }
+        plugins: {
+          legend: {
+            display:false
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+          annotation: hrLimit,
 
-});
+        },
+        elements: {
+          point: {
+            // radius: this.adjustRadiusBasedOnData,
+            // backgroundColor : this.adjustBackgroundColorHR,
+            radius: 0,
+          }
+        },
+      },
+    });
+  }
+
+
+  chartAll() {
+    const canvas = <HTMLCanvasElement>document.getElementById("all");
+
+   
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.timeInterval,
+        datasets: [{
+          label:"Temperature",
+          backgroundColor: 'rgb(95, 242, 90)',
+          borderColor: 'rgb(95, 242, 90)',
+          data: this.temperature,
+          tension: 0.3,
+        },
+        {
+          label:"Oxygen",
+          backgroundColor: 'rgb(255,165,0)',
+          borderColor: 'rgb(255,165,0)',
+          data: this.oxygen,
+          tension: 0.3,
+        },
+        {
+          label:"Heartrate",
+          backgroundColor: 'rgb(100,149,237)',
+          borderColor: 'rgb(100,149,237)',
+          data: this.heartRate,
+          tension: 0.3,
+        }
+      ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              color: "white",
+            },
+            suggestedMin: 90,
+            suggestedMax: 40,
+            beginAtZero: false
+          },
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+
+            grid: {
+              color: "white"
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: "white",
+              font: {
+                size: 12
+              }
+            }
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+        },
+      },
+    });
+
+  }
+
+
+  adjustRadiusBasedOnData(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 5
+      : v < 36 ? 5
+        : 5;
+  }
+
+  adjustBackgroundColor(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 'rgb(255, 99, 132)'
+      : v < 36 ? 'rgb(255, 99, 132)'
+        : 'rgb(95, 242, 90)'
+  }
+
+
+
+  get maxHR() {
+    return Math.max(...this.heartRate);
+  }
+
+  get minHR() {
+    return Math.min(...this.heartRate);
+  }
+
+  get medianHR() {
+    return math.median(this.heartRate);
+  }
+
+  get stdHR() {
+    return math.std(this.heartRate);
+  }
+
+  get maxTemp() {
+    return Math.max(...this.temperature);
+  }
+
+  get minTemp() {
+    return Math.min(...this.temperature);
+  }
+
+  get medianTemp() {
+    return math.median(this.temperature);
+  }
+
+  get stdTemp() {
+    return math.std(this.temperature);
+  }
+
+  get maxOx() {
+    return Math.max(...this.oxygen);
+  }
+
+  get minOx() {
+    return Math.min(...this.oxygen);
+  }
+
+  get medianOx() {
+    return math.median(this.oxygen);
+  }
+
+  get stdOx() {
+    return math.std(this.oxygen);
   }
 
 }
-
-
 
