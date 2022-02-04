@@ -1,58 +1,33 @@
-import { ConnectService } from './../../connect/connect.service';
-import { ActivityFunctionService } from './../activity-function.service';
-import { Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
-
-import { Subscription } from 'rxjs';
-import { ActivitydbService } from '../activitydb.service';
-import { activity } from './../activity.model'
-import { sensordata } from './../activity.model';
-
+import { ActivityFunctionService } from './../../activity/activity-function.service';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+
+import * as math from 'mathjs';
+import { ConnectService } from '../connect.service';
 
 Chart.register(...registerables);
 
 Chart.register(annotationPlugin);
 
 @Component({
-  selector: 'app-activity-list-page',
-  templateUrl: './activity-list-page.component.html',
-  styleUrls: ['./activity-list-page.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-patient-data-dialog',
+  template: `
+    <h1 mat-dialog-title>Patient Data Log</h1>
+    <div mat-dialog-content>
+
+      <h1>Activity Details 🥇</h1>
+      <button mat-flat-button (click)="test()">test</button>
+    </div>
+  `,
+  styles: [
+  ]
 })
+export class PatientDataDialogComponent {
 
-export class ActivityListPageComponent implements OnInit {
-
-  selectTab = 0;
-  activityBoard: activity[];
-  sub: Subscription;
-
-  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService, public connect : ConnectService) { }
-
-  innerHeight: any;
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.innerHeight = window.innerHeight;
-  }
-
-  ngOnInit(): void {
-    this.innerHeight = window.innerHeight;
-
-    this.sub = this.xtvtdb.getAcitivtyLog()
-      .subscribe(log => (this.activityBoard = log));
-
-    this.isDisplayed = false
-
-
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
   isDisplayed: boolean = false;
-
-  @Input() data: any;
-
+  selectTab = 0;
   title: string;
   notes: string;
 
@@ -61,12 +36,11 @@ export class ActivityListPageComponent implements OnInit {
   timeEnd: any;
 
   timeInterval: string[];
-  sensData: sensordata;
   temperature: number[];
-  heartRate: number[];
+  heartrate: number[];
   oxygen: number[];
-  bpLower :number = 0;
-  bpUpper :number = 0;
+  bpLower: number = 0;
+  bpUpper: number = 0;
 
   maxVal: number;
   minVal: number;
@@ -76,81 +50,77 @@ export class ActivityListPageComponent implements OnInit {
   min_thresh: any;
   max_thresh: any;
 
-  showLogDetails(value: any) {
-    try {
-      this.isDisplayed = true
-      this.data = value;
+  constructor(public dialogRef: MatDialogRef<PatientDataDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService) { }
 
-      this.title = this.data.title;
-      this.notes = this.data.notes;
+  ngOnInit(): void {
 
-      this.activityDate = this.data.date;
-      this.timeStart = this.data.time.starttime;
-      this.timeEnd = this.data.time.endtime;
-      this.timeInterval = this.service.getTimeInterval(this.timeEnd - this.timeStart);
-      this.sensData = this.data.sensordata;
-      this.innitData();
+    this.title = this.data.title;
+    this.notes = this.data.notes;
 
-      // this.testChart();
+    this.activityDate = this.data.date;
+    this.timeStart = this.data.time.starttime;
+    this.timeEnd = this.data.time.endtime;
+    this.timeInterval = this.service.getTimeInterval(this.timeEnd - this.timeStart);
 
+    const temp = JSON.parse(JSON.stringify(this.data.temperature));
+    const hr = JSON.parse(JSON.stringify(this.data.heartrate));
+    const oxy = JSON.parse(JSON.stringify(this.data.oximeter));
+    const bpupper = JSON.parse(JSON.stringify(this.data.bloodpressure.upper));
+    const bplower = JSON.parse(JSON.stringify(this.data.bloodpressure.lower));
 
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
-  innitData() {
-
-    const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
-    const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
-    const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
-    const bpupper = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.upper));
-    const bplower = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.lower));
-    
     this.temperature = temp;
-    this.heartRate = heartR;
     this.oxygen = oxy;
+    this.heartrate = hr;
     this.bpLower = bplower;
-    this.bpUpper = bpupper;
-    
+    this.bpUpper = bpupper
+
     if (this.chart) this.chart.destroy();
     this.chartAll();
   }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  test() {
+    const bplower = JSON.parse(JSON.stringify(this.data.bloodpressure.lower));
+    console.log("inside data" + bplower);
+  }
+
+  public chart: Chart;
+  public chartTemp: Chart;
 
   dispTable($event: any) {
     if (this.chart) this.chart.destroy();
     console.log("event index" + $event.index);
 
     if ($event.index == 1) {
-
       this.min_thresh = 37.5;
       this.max_thresh = 36;
-      this.maxVal = this.connect.max(this.temperature);
-      this.minVal = this.connect.min(this.temperature);
-      this.stdVal = this.connect.std(this.temperature);
-      this.medVal = this.connect.median(this.temperature);
-
       try {
         this.chartDisplay(this.temperature, "temperature");
       } catch (error) {
         console.log(error);
       }
 
+      this.maxVal = this.connect.max(this.temperature);
+      this.minVal = this.connect.min(this.temperature);
+      this.stdVal = this.connect.std(this.temperature);
+      this.medVal = this.connect.median(this.temperature);
+
     } else if ($event.index == 2) {
       this.min_thresh = 40;
       this.max_thresh = 255;
-
-      this.maxVal = this.connect.max(this.heartRate);
-      this.minVal = this.connect.min(this.heartRate);
-      this.stdVal = this.connect.std(this.heartRate);
-      this.medVal = this.connect.median(this.heartRate);
-
       try {
-        this.chartDisplay(this.heartRate, "heartRate");
+        this.chartDisplay(this.heartrate, "heartRate");
       } catch (error) {
         console.log(error);
       }
+
+      this.maxVal = this.connect.max(this.heartrate);
+      this.minVal = this.connect.min(this.heartrate);
+      this.stdVal = this.connect.std(this.heartrate);
+      this.medVal = this.connect.median(this.heartrate);
 
     } else if ($event.index == 3) {
 
@@ -166,20 +136,15 @@ export class ActivityListPageComponent implements OnInit {
       } catch (error) {
 
       }
-    } else if ($event.index == 0){
-      try{
+    } else if ($event.index == 0) {
+      try {
         this.chartAll();
-      } catch(error){
+      } catch (error) {
 
       }
     }
 
   }
-
-  public chart: Chart;
-  public chartTemp: Chart;
-  //TODO : sync data with db
-  //problem to take direct from activity type value
 
   chartDisplay(dataset: any[], id: string) {
 
@@ -215,7 +180,7 @@ export class ActivityListPageComponent implements OnInit {
           borderColor: 'rgb(255, 255, 255)',
           data: dataset,
           tension: 0.3,
-          
+
         }]
       },
       options: {
@@ -245,7 +210,7 @@ export class ActivityListPageComponent implements OnInit {
         },
         plugins: {
           legend: {
-            display:false
+            display: false
           },
           decimation: {
             enabled: true,
@@ -265,37 +230,35 @@ export class ActivityListPageComponent implements OnInit {
     });
   }
 
-
   chartAll() {
     const canvas = <HTMLCanvasElement>document.getElementById("all");
 
-   
     this.chart = new Chart(canvas, {
       type: 'line',
       data: {
         labels: this.timeInterval,
         datasets: [{
-          label:"Temperature",
+          label: "Temperature",
           backgroundColor: 'rgb(95, 242, 90)',
           borderColor: 'rgb(95, 242, 90)',
           data: this.temperature,
           tension: 0.3,
         },
         {
-          label:"Oxygen",
+          label: "Oxygen",
           backgroundColor: 'rgb(255,165,0)',
           borderColor: 'rgb(255,165,0)',
           data: this.oxygen,
           tension: 0.3,
         },
         {
-          label:"Heartrate",
+          label: "Heartrate",
           backgroundColor: 'rgb(100,149,237)',
           borderColor: 'rgb(100,149,237)',
-          data: this.heartRate,
+          data: this.heartrate,
           tension: 0.3,
         }
-      ]
+        ]
       },
       options: {
         responsive: true,
@@ -341,24 +304,4 @@ export class ActivityListPageComponent implements OnInit {
 
   }
 
-
-  adjustRadiusBasedOnData(ctx: any) {
-    const v = ctx.parsed.y;
-    return v > 37 ? 5
-      : v < 36 ? 5
-        : 5;
-  }
-
-  adjustBackgroundColor(ctx: any) {
-    const v = ctx.parsed.y;
-    return v > 37 ? 'rgb(255, 99, 132)'
-      : v < 36 ? 'rgb(255, 99, 132)'
-        : 'rgb(95, 242, 90)'
-  }
-
-
-
- 
-
 }
-

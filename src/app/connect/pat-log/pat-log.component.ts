@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges , ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { activity } from 'src/app/activity/activity.model';
+import { PatientDataDialogComponent } from '../dialog/patient-data-dialog.component';
 
 @Component({
   selector: 'app-pat-log',
@@ -14,9 +15,11 @@ export class PatLogComponent implements OnChanges {
   displayedColumns: string[] = ['title', 'notes', 'date'];
   dataSource: MatTableDataSource<string>;
 
+  // sub: Subscription;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnChanges(changes: SimpleChanges): void {
       this.dataSource = new MatTableDataSource(this.patLog);
@@ -32,6 +35,13 @@ export class PatLogComponent implements OnChanges {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openDataDialog(id : string, dataset :any):void{
+    console.log("outer id " + id);
+    this.dialog.open(PatientDataDialogComponent,{
+      data:dataset
+    });
   }
   
 
