@@ -85,12 +85,17 @@
     border-radius: 10px;
 }
 
-.mat-flat-button {
+.notebutton {
     height: 25px;
     line-height: 5px;
     background-color: #fa8142;
     color: rgb(27, 27, 27);
     margin-left: 200px;
+}
+
+.mat-flat-button {
+    background-color: #fa8142;
+    color: rgb(27, 27, 27);
 }
 
 .mid-header {
@@ -127,15 +132,3 @@
 .mat-tab-label.mat-tab-label-active {
     background-color: #fa8142;
 }
-
-// .HRTable {
-//     overflow-x: scroll;
-//     width: 600px;
-//     position: relative;
-// }
-// .HRTable>canvas {
-//     // position: absolute;
-//     left: 0;
-//     top: 0;
-//     pointer-events: none;
-// }

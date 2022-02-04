@@ -21,7 +21,7 @@
             <mat-grid-tile colspan="5" rowspan="2" class="right_border">
                 <div class="desp">
                     <span class="mid-header" style="display: incline-block;">Description :</span>
-                    <button mat-flat-button class="note-button">Edit</button>
+                    <button mat-flat-button class="notebutton">Edit</button>
                     <p class="notes">{{notes}}</p>
                 </div>
             </mat-grid-tile>
@@ -44,7 +44,10 @@
 
         <br><br>
         <mat-tab-group class="tab" mat-align-tabs="start" [(selectedIndex)]="selectTab" (selectedTabChange)="dispTable($event)">
-            <mat-tab label="Temperature">
+            <mat-tab label="All">
+                <canvas id="all" height="38%" width="100%"></canvas>
+            </mat-tab>
+            <mat-tab label="Temperature 🤒">
                 <canvas id="temperature" height="38%" width="100%"></canvas>
                 <div style="margin-top: 30px;">
                     <div>
@@ -60,7 +63,7 @@
 
                 </div>
             </mat-tab>
-            <mat-tab label="Heart Rate">
+            <mat-tab label="Heart Rate 🫀">
                 <canvas id="heartRate" height="38%" width="100%"></canvas>
                 <div style="margin-top: 30px;">
                     <div>
@@ -75,7 +78,7 @@
 
                 </div>
             </mat-tab>
-            <mat-tab label="Oxygen Level">
+            <mat-tab label="Oxygen Level 🤿">
                 <canvas id="oxy" height="38%" width="100%"></canvas>
                 <div style="margin-top: 30px;">
                     <div>
@@ -89,6 +92,15 @@
                     </div>
 
                 </div>
+            </mat-tab>
+            <mat-tab label="Blood Pressure ♦️">
+                <br><br>
+                <h2>Blood Pressure </h2>
+                <br>
+                <h3>Systolic (upper no.) : {{bpUpper}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Diastolic (lower no.) : {{bpLower}}</h3>
+                <br>
+
+                <button mat-flat-button class="note-button">Edit</button>
             </mat-tab>
         </mat-tab-group>
 

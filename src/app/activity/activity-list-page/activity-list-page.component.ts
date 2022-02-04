@@ -1,6 +1,5 @@
-import { ChartConfiguration } from './../../../../node_modules/chart.js/types/index.esm.d';
 import { ActivityFunctionService } from './../activity-function.service';
-import { AfterViewInit, Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ActivitydbService } from '../activitydb.service';
@@ -67,6 +66,8 @@ export class ActivityListPageComponent implements OnInit {
   temperature: number[];
   heartRate: number[];
   oxygen: number[];
+  bpLower :number = 0;
+  bpUpper :number = 0;
 
   maxVal: number;
   minVal: number;
@@ -103,25 +104,28 @@ export class ActivityListPageComponent implements OnInit {
 
 
   innitData() {
-    let tempLength = this.sensData.temperature!.length;
-    let heartLength = this.sensData.heartrate!.length;
-    let oxyLength = this.sensData.oximeter!.length;
 
     const temp = JSON.parse(JSON.stringify(this.sensData.temperature));
     const heartR = JSON.parse(JSON.stringify(this.sensData.heartrate));
     const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
-
-    //this.temperature = new Array(tempLength)
+    const bpupper = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.upper));
+    const bplower = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.lower));
+    
     this.temperature = temp;
     this.heartRate = heartR;
     this.oxygen = oxy;
+    this.bpLower = bplower;
+    this.bpUpper = bpupper;
+    
+    if (this.chart) this.chart.destroy();
+    this.chartAll();
   }
 
   dispTable($event: any) {
     if (this.chart) this.chart.destroy();
     console.log("event index" + $event.index);
 
-    if ($event.index == 0) {
+    if ($event.index == 1) {
       this.min_thresh = 37.5;
       this.max_thresh = 36;
       try {
@@ -135,7 +139,7 @@ export class ActivityListPageComponent implements OnInit {
       this.stdVal = this.stdTemp;
       this.medVal = this.medianTemp;
 
-    } else if ($event.index == 1) {
+    } else if ($event.index == 2) {
       this.min_thresh = 40;
       this.max_thresh = 255;
       try {
@@ -149,7 +153,7 @@ export class ActivityListPageComponent implements OnInit {
       this.stdVal = this.stdHR;
       this.medVal = this.medianHR;
 
-    } else if ($event.index == 2) {
+    } else if ($event.index == 3) {
 
       this.maxVal = this.maxOx;
       this.minVal = this.minOx;
@@ -161,6 +165,12 @@ export class ActivityListPageComponent implements OnInit {
       try {
         this.chartDisplay(this.oxygen, "oxy");
       } catch (error) {
+
+      }
+    } else if ($event.index == 0){
+      try{
+        this.chartAll();
+      } catch(error){
 
       }
     }
@@ -206,127 +216,196 @@ export class ActivityListPageComponent implements OnInit {
           borderColor: 'rgb(255, 255, 255)',
           data: dataset,
           tension: 0.3,
+          
         }]
       },
       options: {
-      responsive: true,
-      scales: {
-        y: {
-          ticks: {
-            color: "white",
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              color: "white",
+            },
+            suggestedMin: 90,
+            suggestedMax: 40,
+            beginAtZero: false
           },
-          suggestedMin: 90,
-          suggestedMax : 40,
-          beginAtZero: false
-        },
-        x: {
-          display: true,
-          ticks: {
-            color: "white",
-            autoSkip: true,
-            maxTicksLimit: 21
-          },
-          beginAtZero: true,
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
 
-          grid: {
-            color: "white"
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: "white",
-            font: {
-              size: 12
+            grid: {
+              color: "white"
             }
           }
         },
-        decimation: {
-          enabled: true,
-          algorithm: 'lttb', samples: 1000
+        plugins: {
+          legend: {
+            display:false
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+          annotation: hrLimit,
+
         },
-        annotation: hrLimit,
-        
+        elements: {
+          point: {
+            // radius: this.adjustRadiusBasedOnData,
+            // backgroundColor : this.adjustBackgroundColorHR,
+            radius: 0,
+          }
+        },
       },
-      elements: {
-        point: {
-          // radius: this.adjustRadiusBasedOnData,
-          // backgroundColor : this.adjustBackgroundColorHR,
-          radius: 0,
+    });
+  }
+
+
+  chartAll() {
+    const canvas = <HTMLCanvasElement>document.getElementById("all");
+
+   
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.timeInterval,
+        datasets: [{
+          label:"Temperature",
+          backgroundColor: 'rgb(95, 242, 90)',
+          borderColor: 'rgb(95, 242, 90)',
+          data: this.temperature,
+          tension: 0.3,
+        },
+        {
+          label:"Oxygen",
+          backgroundColor: 'rgb(255,165,0)',
+          borderColor: 'rgb(255,165,0)',
+          data: this.oxygen,
+          tension: 0.3,
+        },
+        {
+          label:"Heartrate",
+          backgroundColor: 'rgb(100,149,237)',
+          borderColor: 'rgb(100,149,237)',
+          data: this.heartRate,
+          tension: 0.3,
         }
+      ]
       },
-    },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              color: "white",
+            },
+            suggestedMin: 90,
+            suggestedMax: 40,
+            beginAtZero: false
+          },
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+
+            grid: {
+              color: "white"
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: "white",
+              font: {
+                size: 12
+              }
+            }
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+        },
+      },
     });
 
-
-}
-
+  }
 
 
-adjustRadiusBasedOnData(ctx: any) {
-  const v = ctx.parsed.y;
-  return v > 37 ? 5
-    : v < 36 ? 5
-      : 5;
-}
+  adjustRadiusBasedOnData(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 5
+      : v < 36 ? 5
+        : 5;
+  }
 
-adjustBackgroundColor(ctx: any) {
-  const v = ctx.parsed.y;
-  return v > 37 ? 'rgb(255, 99, 132)'
-    : v < 36 ? 'rgb(255, 99, 132)'
-      : 'rgb(95, 242, 90)'
-}
+  adjustBackgroundColor(ctx: any) {
+    const v = ctx.parsed.y;
+    return v > 37 ? 'rgb(255, 99, 132)'
+      : v < 36 ? 'rgb(255, 99, 132)'
+        : 'rgb(95, 242, 90)'
+  }
 
 
 
   get maxHR() {
-  return Math.max(...this.heartRate);
-}
+    return Math.max(...this.heartRate);
+  }
 
   get minHR() {
-  return Math.min(...this.heartRate);
-}
+    return Math.min(...this.heartRate);
+  }
 
   get medianHR() {
-  return math.median(this.heartRate);
-}
+    return math.median(this.heartRate);
+  }
 
   get stdHR() {
-  return math.std(this.heartRate);
-}
+    return math.std(this.heartRate);
+  }
 
   get maxTemp() {
-  return Math.max(...this.temperature);
-}
+    return Math.max(...this.temperature);
+  }
 
   get minTemp() {
-  return Math.min(...this.temperature);
-}
+    return Math.min(...this.temperature);
+  }
 
   get medianTemp() {
-  return math.median(this.temperature);
-}
+    return math.median(this.temperature);
+  }
 
   get stdTemp() {
-  return math.std(this.temperature);
-}
+    return math.std(this.temperature);
+  }
 
-get maxOx() {
-  return Math.max(...this.oxygen);
-}
+  get maxOx() {
+    return Math.max(...this.oxygen);
+  }
 
   get minOx() {
-  return Math.min(...this.oxygen);
-}
+    return Math.min(...this.oxygen);
+  }
 
   get medianOx() {
-  return math.median(this.oxygen);
-}
+    return math.median(this.oxygen);
+  }
 
   get stdOx() {
-  return math.std(this.oxygen);
-}
+    return math.std(this.oxygen);
+  }
 
 }
 

@@ -29,6 +29,6 @@ export interface threedimentionalvalue {
 }
 
 export interface bloodpressure{
-    upper? : number[];
-    lower? : number[];
+    upper? : number;
+    lower? : number;
 }
