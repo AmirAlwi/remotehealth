@@ -18,7 +18,8 @@ Chart.register(annotationPlugin);
     <h1 mat-dialog-title>Patient Data Log</h1>
     <div mat-dialog-content>
 
-      <h1>Activity Details 🥇</h1>
+      <h1 style="display: inline-block;">Activity Details 🥇 &nbsp; &nbsp; &nbsp;</h1>
+      <button mat-button style="background-color: #fa8142; color: rgb(27, 27, 27);" (click)="download()">Download</button>
       <div class="log-content">
         <mat-grid-list cols="10" rowHeight="100px">
           <mat-grid-tile colspan="3" rowspan="1" class="right_border bot_border">
@@ -33,7 +34,6 @@ Chart.register(annotationPlugin);
           <mat-grid-tile colspan="5" rowspan="2" class="right_border">
             <div class="desp">
               <span class="mid-header" style="display: incline-block;">Description :</span>
-              <button mat-flat-button class="notebutton">Edit</button>
               <p class="notes">{{notes}}</p>
             </div>
           </mat-grid-tile>
@@ -174,11 +174,6 @@ Chart.register(annotationPlugin);
     margin-left: 200px;
 }
 
-.mat-flat-button {
-    background-color: #fa8142;
-    color: rgb(27, 27, 27);
-}
-
 .mid-header {
     font-style: bold;
     font-size: 16pt;
@@ -242,6 +237,8 @@ export class PatientDataDialogComponent {
   min_thresh: any;
   max_thresh: any;
 
+  public chart: Chart;
+
   constructor(public dialogRef: MatDialogRef<PatientDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService) { }
 
@@ -255,21 +252,28 @@ export class PatientDataDialogComponent {
 
     this.temperature = this.data.temperature;
     this.heartrate  = this.data.heartrate;
-    this.oxygen  = this.data.oximeter;
+    this.oxygen  = this.data.oxygen;
     this.bpUpper = this.data.bpUpper;
     this.bpLower = this.data.bpLower;
-    console.log(this.oxygen)
-    if (this.chart)
+
+    if (this.chart){
       this.chart.destroy();
-    this.chartAll();
+    } 
+      
+    try {
+      this.chartAll();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  public chart: Chart;
-  public chartTemp: Chart;
+  download(){
+    
+  }
 
   dispTable($event: any) {
     if (this.chart) this.chart.destroy();
@@ -402,8 +406,6 @@ export class PatientDataDialogComponent {
         },
         elements: {
           point: {
-            // radius: this.adjustRadiusBasedOnData,
-            // backgroundColor : this.adjustBackgroundColorHR,
             radius: 0,
           }
         },
