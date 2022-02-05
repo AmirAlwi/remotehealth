@@ -1,3 +1,4 @@
+import { SupportComponent } from './support/support.component';
 import { UserGuard } from './user/user.guard';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -23,6 +24,10 @@ const routes: Routes = [
     path: 'connect',
     loadChildren: () => import('./connect/chat.module').then(m => m.ChatModule),
     canActivate: [UserGuard]
+  },
+  {
+    path : 'support',
+    component: SupportComponent
   }
 ];
 

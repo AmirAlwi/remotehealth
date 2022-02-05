@@ -1,4 +1,3 @@
-import { SupportComponent } from './../support/support.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UserGuard } from './user.guard';
 import { ProfileSetupComponent } from './profile-setup/profile-setup.component';
@@ -20,10 +19,6 @@ const routes: Routes = [
     path : 'profile',
     component : ProfilePageComponent,
     canActivate : [UserGuard]
-  },
-  {
-    path : 'support',
-    component: SupportComponent
   }
 
 ];
