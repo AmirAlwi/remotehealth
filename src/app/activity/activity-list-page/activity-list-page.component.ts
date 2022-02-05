@@ -1,3 +1,4 @@
+import { ConnectService } from './../../connect/connect.service';
 import { ActivityFunctionService } from './../activity-function.service';
 import { Component, HostListener, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
@@ -8,8 +9,6 @@ import { sensordata } from './../activity.model';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-
-import * as math from 'mathjs';
 
 Chart.register(...registerables);
 
@@ -28,7 +27,7 @@ export class ActivityListPageComponent implements OnInit {
   activityBoard: activity[];
   sub: Subscription;
 
-  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService) { }
+  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService, public connect : ConnectService) { }
 
   innerHeight: any;
   @HostListener('window:resize', ['$event'])
@@ -85,11 +84,9 @@ export class ActivityListPageComponent implements OnInit {
       this.title = this.data.title;
       this.notes = this.data.notes;
 
-      // this.activityDate = Date.parse(this.service.toDate(this.data.date.toString()));
       this.activityDate = this.data.date;
       this.timeStart = this.data.time.starttime;
       this.timeEnd = this.data.time.endtime;
-      // this.timeInterval = JSON.parse(JSON.stringify(this.timeEnd-this.timeStart));
       this.timeInterval = this.service.getTimeInterval(this.timeEnd - this.timeStart);
       this.sensData = this.data.sensordata;
       this.innitData();
@@ -126,39 +123,41 @@ export class ActivityListPageComponent implements OnInit {
     console.log("event index" + $event.index);
 
     if ($event.index == 1) {
+
       this.min_thresh = 37.5;
       this.max_thresh = 36;
+      this.maxVal = this.connect.max(this.temperature);
+      this.minVal = this.connect.min(this.temperature);
+      this.stdVal = this.connect.std(this.temperature);
+      this.medVal = this.connect.median(this.temperature);
+
       try {
         this.chartDisplay(this.temperature, "temperature");
       } catch (error) {
         console.log(error);
       }
 
-      this.maxVal = this.maxTemp;
-      this.minVal = this.minTemp;
-      this.stdVal = this.stdTemp;
-      this.medVal = this.medianTemp;
-
     } else if ($event.index == 2) {
       this.min_thresh = 40;
       this.max_thresh = 255;
+
+      this.maxVal = this.connect.max(this.heartRate);
+      this.minVal = this.connect.min(this.heartRate);
+      this.stdVal = this.connect.std(this.heartRate);
+      this.medVal = this.connect.median(this.heartRate);
+
       try {
         this.chartDisplay(this.heartRate, "heartRate");
       } catch (error) {
         console.log(error);
       }
 
-      this.maxVal = this.maxHR;
-      this.minVal = this.minHR;
-      this.stdVal = this.stdHR;
-      this.medVal = this.medianHR;
-
     } else if ($event.index == 3) {
 
-      this.maxVal = this.maxOx;
-      this.minVal = this.minOx;
-      this.stdVal = this.stdOx;
-      this.medVal = this.medianOx;
+      this.maxVal = this.connect.max(this.oxygen);
+      this.minVal = this.connect.min(this.oxygen);
+      this.stdVal = this.connect.std(this.oxygen);
+      this.medVal = this.connect.median(this.oxygen);
 
       this.min_thresh = 90;
       this.max_thresh = 100;
@@ -359,53 +358,7 @@ export class ActivityListPageComponent implements OnInit {
 
 
 
-  get maxHR() {
-    return Math.max(...this.heartRate);
-  }
-
-  get minHR() {
-    return Math.min(...this.heartRate);
-  }
-
-  get medianHR() {
-    return math.median(this.heartRate);
-  }
-
-  get stdHR() {
-    return math.std(this.heartRate);
-  }
-
-  get maxTemp() {
-    return Math.max(...this.temperature);
-  }
-
-  get minTemp() {
-    return Math.min(...this.temperature);
-  }
-
-  get medianTemp() {
-    return math.median(this.temperature);
-  }
-
-  get stdTemp() {
-    return math.std(this.temperature);
-  }
-
-  get maxOx() {
-    return Math.max(...this.oxygen);
-  }
-
-  get minOx() {
-    return Math.min(...this.oxygen);
-  }
-
-  get medianOx() {
-    return math.median(this.oxygen);
-  }
-
-  get stdOx() {
-    return math.std(this.oxygen);
-  }
+ 
 
 }
 

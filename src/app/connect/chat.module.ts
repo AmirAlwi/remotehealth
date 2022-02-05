@@ -13,6 +13,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManagePatientComponent } from './manage-patient/manage-patient.component';
 import { PatCredentialComponent } from './pat-credential/pat-credential.component';
 import { PatLogComponent } from './pat-log/pat-log.component';
+import { PatientDataDialogComponent } from './dialog/patient-data-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
+import {MatCardModule} from '@angular/material/card';
+
 @NgModule({
   declarations: [
     ChatBoardListComponent,
@@ -22,6 +28,7 @@ import { PatLogComponent } from './pat-log/pat-log.component';
     ManagePatientComponent,
     PatCredentialComponent,
     PatLogComponent,
+    PatientDataDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +38,11 @@ import { PatLogComponent } from './pat-log/pat-log.component';
     ChatRoutingModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatCardModule,
+    MatGridListModule,
+    MatTabsModule
   ]
 })
 export class ChatModule { }

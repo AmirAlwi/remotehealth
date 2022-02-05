@@ -7,6 +7,7 @@ import { chatCredential, postQ } from './chat.model';
 import { arrayUnion } from 'firebase/firestore'
 import { combineLatest, Observable, of } from 'rxjs';
 import { User } from '../user/login-page/user';
+import * as math from 'mathjs';
 
 interface patientListing{
   name? : string,
@@ -176,4 +177,21 @@ export class ConnectService {
     return this.db.collection<chatCredential>('activity',ref =>
     ref.where('uid', '==', patId)).valueChanges({idField : 'id'});
   }
+
+  max(dataset : number[]) {
+    return Math.max(...dataset);
+  }
+
+  min(dataset : number[]) {
+    return Math.min(...dataset);
+  }
+
+  median(dataset : number[]) {
+    return math.median(dataset);
+  }
+
+  std(dataset : number[]) {
+    return math.std(dataset);
+  }
+
 }

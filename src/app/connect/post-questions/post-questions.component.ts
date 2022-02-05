@@ -2,7 +2,6 @@ import { postQ, Tag } from './../chat.model';
 import { ConnectService } from '../connect.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { arrayUnion } from 'firebase/firestore'
 
 @Component({
   selector: 'app-post-questions',
