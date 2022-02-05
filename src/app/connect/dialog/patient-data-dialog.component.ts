@@ -4,14 +4,13 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-
-import * as math from 'mathjs';
+import { saveAs } from 'file-saver'
 import { ConnectService } from '../connect.service';
 
 Chart.register(...registerables);
 
 Chart.register(annotationPlugin);
-
+declare var require: any;
 @Component({
   selector: 'app-patient-data-dialog',
   template: `
@@ -213,6 +212,8 @@ Chart.register(annotationPlugin);
 })
 export class PatientDataDialogComponent {
 
+
+
   isDisplayed: boolean = false;
   selectTab = 0;
   title: string;
@@ -270,9 +271,19 @@ export class PatientDataDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
-
+  
+  
   download(){
+    const { convertArrayToCSV } = require('convert-array-to-csv');
+
+    const dataArrays = [['no.',this.timeInterval],['temperature',this.temperature],['heartrate',this.heartrate],['oxygen',this.oxygen]];
     
+    const csvFromArrayOfArrays = convertArrayToCSV(dataArrays, {
+      separator: ','
+    });
+
+    let blob = new Blob([csvFromArrayOfArrays], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, this.title + ".csv");
   }
 
   dispTable($event: any) {
