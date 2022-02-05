@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { sensordata } from 'src/app/activity/activity.model';
 import { PatientDataDialogComponent } from '../dialog/patient-data-dialog.component';
 
 @Component({
@@ -37,10 +38,11 @@ export class PatLogComponent implements OnChanges {
     }
   }
 
-  openDataDialog(id : string, dataset :any):void{
-    console.log("outer id " + id);
+  openDataDialog(title : string, notes :any, date:number, starttime: number, endtime : number, temperature : number[], oxygen: number[], heartrate : number[], bpUpper : number, bpLower : number):void{
     this.dialog.open(PatientDataDialogComponent,{
-      data:dataset
+      width:'80%',
+      height:'90%',
+      data:{title, notes,date, starttime, endtime, temperature, oxygen, heartrate, bpUpper, bpLower}
     });
   }
   

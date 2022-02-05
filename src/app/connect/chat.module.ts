@@ -15,6 +15,10 @@ import { PatCredentialComponent } from './pat-credential/pat-credential.componen
 import { PatLogComponent } from './pat-log/pat-log.component';
 import { PatientDataDialogComponent } from './dialog/patient-data-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
+import {MatCardModule} from '@angular/material/card';
+
 @NgModule({
   declarations: [
     ChatBoardListComponent,
@@ -35,7 +39,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule,
+    MatGridListModule,
+    MatTabsModule
   ]
 })
 export class ChatModule { }

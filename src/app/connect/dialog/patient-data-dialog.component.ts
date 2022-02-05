@@ -1,3 +1,4 @@
+import { sensordata } from './../../activity/activity.model';
 import { ActivityFunctionService } from './../../activity/activity-function.service';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -18,11 +19,202 @@ Chart.register(annotationPlugin);
     <div mat-dialog-content>
 
       <h1>Activity Details 🥇</h1>
-      <button mat-flat-button (click)="test()">test</button>
+      <div class="log-content">
+        <mat-grid-list cols="10" rowHeight="100px">
+          <mat-grid-tile colspan="3" rowspan="1" class="right_border bot_border">
+            <div class="align-left">
+              <h1 class="contentTitle">{{title}}</h1>
+              <div class="date">
+                  {{activityDate | date:'longDate'}}
+              </div>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="5" rowspan="2" class="right_border">
+            <div class="desp">
+              <span class="mid-header" style="display: incline-block;">Description :</span>
+              <button mat-flat-button class="notebutton">Edit</button>
+              <p class="notes">{{notes}}</p>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="2" class="bot_border">
+            <div class="dispTime">
+              <h1 style="font-size: 25pt; border-bottom: 1px solid white;">Time</h1>
+              <br>
+              <h2 class="timeHeader">Start : </h2>
+              <h2 class="timeHeader" style="margin-left: 20px;">{{timeStart | date:'shortTime'}}</h2>
+              <br>
+              <h2 class="timeHeader">Finish :</h2>
+              <h2 class="timeHeader" style="margin-left: 10px;">{{timeEnd | date:'shortTime'}}</h2>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3" rowspan="1" class="right_border">
+            <div class="feel">
+                <h2 class="mid-header">How did you feel?</h2>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <br><br>
+        <mat-tab-group class="tab" mat-align-tabs="start" [(selectedIndex)]="selectTab" (selectedTabChange)="dispTable($event)">
+          <mat-tab label="All">
+              <canvas id="all" height="20%" width="100%"></canvas>
+          </mat-tab>
+          <mat-tab label="Temperature 🤒">
+            <canvas id="temperature" height="20%" width="100%"></canvas>
+            <div style="margin-top: 30px;">
+              <div>
+                <span>Max : {{maxVal}}</span>
+                <span style="margin-left: 40px;">Min : {{minVal}}</span>
+              </div>
+              <br>
+              <div>
+                <span>Median : {{medVal}}</span>
+                <span style="margin-left: 40px;">Standard Deviation : {{stdVal}}</span>
+              </div>
+
+
+            </div>
+          </mat-tab>
+          <mat-tab label="Heart Rate 🫀">
+            <canvas id="heartRate" height="20%" width="100%"></canvas>
+            <div style="margin-top: 30px;">
+              <div>
+                <span>Max : {{maxVal}}</span>
+                <span style="margin-left: 40px;">Min : {{minVal}}</span>
+              </div>
+              <br>
+              <div>
+                <span>Median : {{medVal}}</span>
+                <span style="margin-left: 40px;">Standard Deviation : {{stdVal}}</span>
+              </div>
+
+            </div>
+          </mat-tab>
+          <mat-tab label="Oxygen Level 🤿">
+            <canvas id="oxy" height="20%" width="100%"></canvas>
+            <div style="margin-top: 30px;">
+              <div>
+                <span>Max : {{maxVal}}</span>
+                <span style="margin-left: 40px;">Min : {{minVal}}</span>
+              </div>
+              <br>
+              <div>
+                <span>Median : {{medVal}}</span>
+                <span style="margin-left: 40px;">Standard Deviation : {{stdVal}}</span>
+              </div>
+
+            </div>
+          </mat-tab>
+          <mat-tab label="Blood Pressure ♦️">
+            <br><br>
+            <h2>Blood Pressure </h2>
+            <br>
+            <h3>Systolic (upper no.) : {{bpUpper}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Diastolic (lower no.) : {{bpLower}}</h3>
+            <br>
+
+            <button mat-flat-button class="note-button">Edit</button>
+          </mat-tab>
+        </mat-tab-group>
+
+      </div>
     </div>
   `,
-  styles: [
-  ]
+  styles: [`
+  .log-content {
+    border: 2px solid white;
+    min-height: 90%;
+    max-height: 90%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .align-left {
+    position: absolute;
+    left: 5px;
+}
+
+.mat-dialog-content {
+    max-height: 100%;
+}
+
+.contentTitle {
+    font-size: 25pt;
+    letter-spacing: 1pt;
+    line-height: 0;
+}
+
+.date {
+    line-height: 2em;
+    font-size: 13pt;
+    color: #16dfd5;
+}
+
+.desp {
+    position: absolute;
+    top: 5px;
+    left: 13px;
+}
+
+.notes {
+    margin-top: 5px;
+    padding: 3px;
+    min-width: 400px;
+    max-width: 500px;
+    min-height: 155px;
+    background-color: #fa8142;
+    border-radius: 10px;
+}
+
+.notebutton {
+    height: 25px;
+    line-height: 5px;
+    background-color: #fa8142;
+    color: rgb(27, 27, 27);
+    margin-left: 200px;
+}
+
+.mat-flat-button {
+    background-color: #fa8142;
+    color: rgb(27, 27, 27);
+}
+
+.mid-header {
+    font-style: bold;
+    font-size: 16pt;
+}
+
+.feel {
+    position: absolute;
+    justify-content: center;
+    top: 5px;
+}
+
+.dispTime {
+    position: absolute;
+    left: 15px;
+    top: 5px;
+}
+
+.right_border {
+    border-right: 1px solid white;
+    ;
+}
+
+.bot_border {
+    border-bottom: 1px solid white;
+    ;
+}
+
+.timeHeader {
+    display: inline-block;
+}
+
+.mat-tab-label.mat-tab-label-active {
+    background-color: #fa8142;
+}
+
+  `]
 })
 export class PatientDataDialogComponent {
 
@@ -54,37 +246,26 @@ export class PatientDataDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService) { }
 
   ngOnInit(): void {
-
     this.title = this.data.title;
     this.notes = this.data.notes;
-
     this.activityDate = this.data.date;
-    this.timeStart = this.data.time.starttime;
-    this.timeEnd = this.data.time.endtime;
+    this.timeStart = this.data.starttime;
+    this.timeEnd= this.data.endtime;
     this.timeInterval = this.service.getTimeInterval(this.timeEnd - this.timeStart);
 
-    const temp = JSON.parse(JSON.stringify(this.data.temperature));
-    const hr = JSON.parse(JSON.stringify(this.data.heartrate));
-    const oxy = JSON.parse(JSON.stringify(this.data.oximeter));
-    const bpupper = JSON.parse(JSON.stringify(this.data.bloodpressure.upper));
-    const bplower = JSON.parse(JSON.stringify(this.data.bloodpressure.lower));
-
-    this.temperature = temp;
-    this.oxygen = oxy;
-    this.heartrate = hr;
-    this.bpLower = bplower;
-    this.bpUpper = bpupper
-
-    if (this.chart) this.chart.destroy();
+    this.temperature = this.data.temperature;
+    this.heartrate  = this.data.heartrate;
+    this.oxygen  = this.data.oximeter;
+    this.bpUpper = this.data.bpUpper;
+    this.bpLower = this.data.bpLower;
+    console.log(this.oxygen)
+    if (this.chart)
+      this.chart.destroy();
     this.chartAll();
   }
+
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  test() {
-    const bplower = JSON.parse(JSON.stringify(this.data.bloodpressure.lower));
-    console.log("inside data" + bplower);
   }
 
   public chart: Chart;
