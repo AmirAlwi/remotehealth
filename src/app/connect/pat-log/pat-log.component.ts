@@ -1,9 +1,9 @@
+import { GeoPoint } from 'firebase/firestore';
 import { Component, Input, OnChanges, SimpleChanges , ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { sensordata } from 'src/app/activity/activity.model';
 import { PatientDataDialogComponent } from '../dialog/patient-data-dialog.component';
 
 @Component({
@@ -38,7 +38,7 @@ export class PatLogComponent implements OnChanges {
     }
   }
 
-  openDataDialog(title : string, notes :any, date:number, starttime: number, endtime : number, temperature : number[], oxygen: number[], heartrate : number[], bpUpper : number, bpLower : number):void{
+  openDataDialog(title : string, notes :any, date:number, starttime: number, endtime : number, temperature : number[], oxygen: number[], heartrate : number[], bpUpper : number, bpLower : number, position: GeoPoint ):void{
     this.dialog.open(PatientDataDialogComponent,{
       width:'80%',
       height:'90%',

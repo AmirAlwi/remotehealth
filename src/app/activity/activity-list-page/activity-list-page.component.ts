@@ -107,7 +107,6 @@ export class ActivityListPageComponent implements OnInit {
       this.sensData = this.data.sensordata;
       this.innitData();
 
-      // this.testChart();
 
 
     } catch (error) {
@@ -133,23 +132,33 @@ export class ActivityListPageComponent implements OnInit {
     this.lat = geoposition.latitude;
     this.lng = geoposition.longitude;
 
-    if (this.chart) this.chart.destroy();
-    this.chartAll();
+    if (this.chart)
+    {
+      this.chart.destroy();
+    }
+
+    console.log("current tab : " +this.selectTab);
+    if(this.selectTab == 0){
+      this.chartAll();
+    } else{
+      this.dispChart(this.selectTab);
+    }
+    
+    
     try {
       this.center = { lat: this.lat, lng: this.lng };
       this.markerPositions = { lat: this.lat, lng: this.lng };
     } catch (error) {
       console.log(error);
+      console.log("error in try map");
     }
 
   }
 
-
-  dispTable($event: any) {
+  dispChart(index:number){
     if (this.chart) this.chart.destroy();
-    console.log("event index" + $event.index);
 
-    if ($event.index == 1) {
+    if (index == 1) {
 
       this.min_thresh = 37.5;
       this.max_thresh = 36;
@@ -164,7 +173,7 @@ export class ActivityListPageComponent implements OnInit {
         console.log(error);
       }
 
-    } else if ($event.index == 2) {
+    } else if (index == 2) {
       this.min_thresh = 40;
       this.max_thresh = 255;
 
@@ -179,7 +188,7 @@ export class ActivityListPageComponent implements OnInit {
         console.log(error);
       }
 
-    } else if ($event.index == 3) {
+    } else if (index == 3) {
 
       this.maxVal = this.connect.max(this.oxygen);
       this.minVal = this.connect.min(this.oxygen);
@@ -193,14 +202,20 @@ export class ActivityListPageComponent implements OnInit {
       } catch (error) {
 
       }
-    } else if ($event.index == 0) {
+    } else if (index == 0) {
       try {
         this.chartAll();
       } catch (error) {
 
       }
     }
+  }
 
+
+  tabChange($event: any) {
+    this.selectTab = $event.index;
+
+    this.dispChart($event.index);
   }
 
   public chart: Chart;

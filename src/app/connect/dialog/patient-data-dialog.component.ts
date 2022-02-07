@@ -7,6 +7,10 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { saveAs } from 'file-saver'
 import { ConnectService } from '../connect.service';
 
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 Chart.register(...registerables);
 
 Chart.register(annotationPlugin);
@@ -113,6 +117,13 @@ declare var require: any;
 
             <button mat-flat-button class="note-button">Edit</button>
           </mat-tab>
+          <mat-tab label="Location">
+                <div *ngIf="apiLoaded | async" style="margin-left: 15%; margin-top: 10px;">
+                    <google-map height="400px" width="750px" [center]="center" [zoom]="zoom">
+                        <map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
+                    </google-map>
+                </div>
+            </mat-tab>
         </mat-tab-group>
 
       </div>
@@ -212,8 +223,7 @@ declare var require: any;
 })
 export class PatientDataDialogComponent {
 
-
-
+  apiLoaded: Observable<boolean>;
   isDisplayed: boolean = false;
   selectTab = 0;
   title: string;
@@ -238,10 +248,24 @@ export class PatientDataDialogComponent {
   min_thresh: any;
   max_thresh: any;
 
+  lng: number = 0;
+  lat: number = 0;
+
+  center: google.maps.LatLngLiteral;
+  zoom: 18;
+  markerPositions: google.maps.LatLngLiteral;
+  markerOptions: google.maps.MarkerOptions = { draggable: false };
+
   public chart: Chart;
 
   constructor(public dialogRef: MatDialogRef<PatientDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService) { }
+    @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService, public httpClient: HttpClient) { 
+      this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyC-_FuLANbZGzSxxh-uOsi8hBKVhNVKaco', 'callback')
+      .pipe(
+        map(() => true),
+        catchError(() => of(false)),
+      );
+    }
 
   ngOnInit(): void {
     this.title = this.data.title;
@@ -257,6 +281,9 @@ export class PatientDataDialogComponent {
     this.bpUpper = this.data.bpUpper;
     this.bpLower = this.data.bpLower;
 
+    this.lat = this.data.position.latitude;
+    this.lng = this.data.position.longitude;
+    
     if (this.chart){
       this.chart.destroy();
     } 
@@ -266,6 +293,14 @@ export class PatientDataDialogComponent {
     } catch (error) {
       console.log(error);
     }
+
+    try {
+      this.center = { lat: this.lat, lng: this.lng };
+      this.markerPositions = { lat: this.lat, lng: this.lng };
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   onNoClick(): void {

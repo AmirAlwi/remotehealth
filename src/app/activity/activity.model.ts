@@ -35,8 +35,3 @@ export interface bloodpressure{
     upper? : number;
     lower? : number;
 }
-
-export interface gps{
-    lat?: number;
-    lng?: number;
-}

@@ -44,7 +44,7 @@
         </mat-grid-list>
 
         <br><br>
-        <mat-tab-group class="tab" mat-align-tabs="start" [(selectedIndex)]="selectTab" (selectedTabChange)="dispTable($event)">
+        <mat-tab-group class="tab" mat-align-tabs="start" [(selectedIndex)]="selectTab" (selectedTabChange)="tabChange($event)">
             <mat-tab label="All">
                 <canvas id="all" height="38%" width="100%"></canvas>
             </mat-tab>
