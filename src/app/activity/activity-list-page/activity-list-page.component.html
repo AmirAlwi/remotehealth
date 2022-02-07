@@ -1,6 +1,7 @@
 <div class="logBoard">
 
-    <app-activity-log *ngFor="let board of activityBoard" [board]="board" (click)="showLogDetails(board)"></app-activity-log>
+    <app-activity-log *ngFor="let board of activityBoard" [board]="board" (click)="showLogDetails(board)">
+    </app-activity-log>
 
 </div>
 <!-- *ngIf="isDisplayed" -->
@@ -97,10 +98,18 @@
                 <br><br>
                 <h2>Blood Pressure </h2>
                 <br>
-                <h3>Systolic (upper no.) : {{bpUpper}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Diastolic (lower no.) : {{bpLower}}</h3>
+                <h3>Systolic (upper no.) : {{bpUpper}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Diastolic (lower no.) : {{bpLower}}
+                </h3>
                 <br>
 
                 <button mat-flat-button class="note-button">Edit</button>
+            </mat-tab>
+            <mat-tab label="Location">
+                <div *ngIf="apiLoaded | async" style="margin-left: 15%; margin-top: 10px;">
+                    <google-map height="400px" width="750px" [center]="center" [zoom]="zoom">
+                        <map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
+                    </google-map>
+                </div>
             </mat-tab>
         </mat-tab-group>
 

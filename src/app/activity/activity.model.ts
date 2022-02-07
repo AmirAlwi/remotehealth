@@ -1,3 +1,5 @@
+import { GeoPoint } from "firebase/firestore";
+
 export interface activity{
     id?: string;
     title? : string;
@@ -18,6 +20,7 @@ export interface sensordata{
     temperature? : number[];
     oximeter?: number[];
     bloodpressure? : bloodpressure;
+    position? : GeoPoint
     // accelerometer? : threedimentionalvalue;
     // gyroscope? : threedimentionalvalue;
 }
@@ -31,4 +34,9 @@ export interface threedimentionalvalue {
 export interface bloodpressure{
     upper? : number;
     lower? : number;
+}
+
+export interface gps{
+    lat?: number;
+    lng?: number;
 }

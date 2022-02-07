@@ -11,6 +11,8 @@ import { ActivityListPageComponent } from './activity-list-page/activity-list-pa
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [    ActivityLogComponent, ActivityListPageComponent],
@@ -21,7 +23,10 @@ import { MatTabsModule } from '@angular/material/tabs';
     FormsModule,
     MatCardModule,
     MatGridListModule,
-    MatTabsModule
+    MatTabsModule,
+    GoogleMapsModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
   ]
 })
 export class ActivityLogModule { }

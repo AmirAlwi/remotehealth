@@ -9,6 +9,9 @@ import { sensordata } from './../activity.model';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 Chart.register(...registerables);
 
@@ -26,8 +29,15 @@ export class ActivityListPageComponent implements OnInit {
   selectTab = 0;
   activityBoard: activity[];
   sub: Subscription;
+  apiLoaded: Observable<boolean>;
 
-  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService, public connect : ConnectService) { }
+  constructor(public xtvtdb: ActivitydbService, public service: ActivityFunctionService, public connect: ConnectService, public httpClient: HttpClient) {
+    this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyC-_FuLANbZGzSxxh-uOsi8hBKVhNVKaco', 'callback')
+      .pipe(
+        map(() => true),
+        catchError(() => of(false)),
+      );
+  }
 
   innerHeight: any;
   @HostListener('window:resize', ['$event'])
@@ -42,7 +52,6 @@ export class ActivityListPageComponent implements OnInit {
       .subscribe(log => (this.activityBoard = log));
 
     this.isDisplayed = false
-
 
   }
 
@@ -65,8 +74,10 @@ export class ActivityListPageComponent implements OnInit {
   temperature: number[];
   heartRate: number[];
   oxygen: number[];
-  bpLower :number = 0;
-  bpUpper :number = 0;
+  bpLower: number = 0;
+  bpUpper: number = 0;
+  lng: number = 0;
+  lat: number = 0;
 
   maxVal: number;
   minVal: number;
@@ -75,6 +86,11 @@ export class ActivityListPageComponent implements OnInit {
 
   min_thresh: any;
   max_thresh: any;
+
+  center: google.maps.LatLngLiteral;
+  zoom: 18;
+  markerPositions: google.maps.LatLngLiteral;
+  markerOptions: google.maps.MarkerOptions = { draggable: false };
 
   showLogDetails(value: any) {
     try {
@@ -107,16 +123,27 @@ export class ActivityListPageComponent implements OnInit {
     const oxy = JSON.parse(JSON.stringify(this.sensData.oximeter));
     const bpupper = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.upper));
     const bplower = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.lower));
-    
+    const geoposition = JSON.parse(JSON.stringify(this.sensData.position));
+
     this.temperature = temp;
     this.heartRate = heartR;
     this.oxygen = oxy;
     this.bpLower = bplower;
     this.bpUpper = bpupper;
-    
+    this.lat = geoposition.latitude;
+    this.lng = geoposition.longitude;
+
     if (this.chart) this.chart.destroy();
     this.chartAll();
+    try {
+      this.center = { lat: this.lat, lng: this.lng };
+      this.markerPositions = { lat: this.lat, lng: this.lng };
+    } catch (error) {
+      console.log(error);
+    }
+
   }
+
 
   dispTable($event: any) {
     if (this.chart) this.chart.destroy();
@@ -166,10 +193,10 @@ export class ActivityListPageComponent implements OnInit {
       } catch (error) {
 
       }
-    } else if ($event.index == 0){
-      try{
+    } else if ($event.index == 0) {
+      try {
         this.chartAll();
-      } catch(error){
+      } catch (error) {
 
       }
     }
@@ -215,7 +242,7 @@ export class ActivityListPageComponent implements OnInit {
           borderColor: 'rgb(255, 255, 255)',
           data: dataset,
           tension: 0.3,
-          
+
         }]
       },
       options: {
@@ -245,7 +272,7 @@ export class ActivityListPageComponent implements OnInit {
         },
         plugins: {
           legend: {
-            display:false
+            display: false
           },
           decimation: {
             enabled: true,
@@ -269,33 +296,33 @@ export class ActivityListPageComponent implements OnInit {
   chartAll() {
     const canvas = <HTMLCanvasElement>document.getElementById("all");
 
-   
+
     this.chart = new Chart(canvas, {
       type: 'line',
       data: {
         labels: this.timeInterval,
         datasets: [{
-          label:"Temperature",
+          label: "Temperature",
           backgroundColor: 'rgb(95, 242, 90)',
           borderColor: 'rgb(95, 242, 90)',
           data: this.temperature,
           tension: 0.3,
         },
         {
-          label:"Oxygen",
+          label: "Oxygen",
           backgroundColor: 'rgb(255,165,0)',
           borderColor: 'rgb(255,165,0)',
           data: this.oxygen,
           tension: 0.3,
         },
         {
-          label:"Heartrate",
+          label: "Heartrate",
           backgroundColor: 'rgb(100,149,237)',
           borderColor: 'rgb(100,149,237)',
           data: this.heartRate,
           tension: 0.3,
         }
-      ]
+        ]
       },
       options: {
         responsive: true,
@@ -358,7 +385,7 @@ export class ActivityListPageComponent implements OnInit {
 
 
 
- 
+
 
 }
 
