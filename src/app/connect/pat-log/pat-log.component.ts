@@ -42,7 +42,7 @@ export class PatLogComponent implements OnChanges {
     this.dialog.open(PatientDataDialogComponent,{
       width:'80%',
       height:'90%',
-      data:{title, notes,date, starttime, endtime, temperature, oxygen, heartrate, bpUpper, bpLower}
+      data:{title, notes,date, starttime, endtime, temperature, oxygen, heartrate, bpUpper, bpLower,position}
     });
   }
   

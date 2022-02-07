@@ -283,7 +283,7 @@ export class PatientDataDialogComponent {
 
     this.lat = this.data.position.latitude;
     this.lng = this.data.position.longitude;
-    
+
     if (this.chart){
       this.chart.destroy();
     } 
