@@ -38,11 +38,12 @@ export class PatLogComponent implements OnChanges {
     }
   }
 
-  openDataDialog(title : string, notes :any, date:number, starttime: number, endtime : number, temperature : number[], oxygen: number[], heartrate : number[], bpUpper : number, bpLower : number, position: GeoPoint ):void{
+  openDataDialog(title : string, notes :any, date:number, starttime: number, endtime : number, temperature : number[], oxygen: number[], heartrate : number[], bpUpper : number, bpLower : number, position?: GeoPoint, yaw?: number[],pitch?: number[], roll?: number[], accX?: number[], accY?: number[], accZ?: number[], magX?: number[], magY?: number[], magZ?: number[], gyroX?: number[], gyroY?: number[], gyroZ?: number[] ):void{
+    console.log("dialog " + accX); //test
     this.dialog.open(PatientDataDialogComponent,{
       width:'80%',
       height:'90%',
-      data:{title, notes,date, starttime, endtime, temperature, oxygen, heartrate, bpUpper, bpLower,position}
+      data:{title, notes,date, starttime, endtime, temperature, oxygen, heartrate, bpUpper, bpLower,position, yaw, pitch, roll, accX, accY, accZ, magX, magY, magZ, gyroX, gyroY, gyroZ}
     });
   }
   

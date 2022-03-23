@@ -117,13 +117,13 @@ declare var require: any;
 
             <button mat-flat-button class="note-button">Edit</button>
           </mat-tab>
-          <mat-tab label="Location">
+          <!-- <mat-tab label="Location">
                 <div *ngIf="apiLoaded | async" style="margin-left: 15%; margin-top: 10px;">
                     <google-map height="400px" width="750px" [center]="center" [zoom]="zoom">
                         <map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
                     </google-map>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
         </mat-tab-group>
 
       </div>
@@ -223,7 +223,7 @@ declare var require: any;
 })
 export class PatientDataDialogComponent {
 
-  apiLoaded: Observable<boolean>;
+  // apiLoaded: Observable<boolean>;
   isDisplayed: boolean = false;
   selectTab = 0;
   title: string;
@@ -240,6 +240,20 @@ export class PatientDataDialogComponent {
   bpLower: number = 0;
   bpUpper: number = 0;
 
+  //data gathering for posture
+  accX: number[];
+  accY: number[];
+  accZ: number[];
+  gyroX: number[];
+  gyroY: number[];
+  gyroZ: number[];
+  magX: number[];
+  magY: number[];
+  magZ: number[];
+  yaw: number[];
+  pitch: number[];
+  roll: number[];
+
   maxVal: number;
   minVal: number;
   stdVal: number;
@@ -251,23 +265,24 @@ export class PatientDataDialogComponent {
   lng: number = 0;
   lat: number = 0;
 
-  center: google.maps.LatLngLiteral;
-  zoom: 18;
-  markerPositions: google.maps.LatLngLiteral;
-  markerOptions: google.maps.MarkerOptions = { draggable: false };
+  // center: google.maps.LatLngLiteral;
+  // zoom: 18;
+  // markerPositions: google.maps.LatLngLiteral;
+  // markerOptions: google.maps.MarkerOptions = { draggable: false };
 
   public chart: Chart;
 
   constructor(public dialogRef: MatDialogRef<PatientDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public connect: ConnectService, public service: ActivityFunctionService, public httpClient: HttpClient) { 
-      this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyC-_FuLANbZGzSxxh-uOsi8hBKVhNVKaco', 'callback')
-      .pipe(
-        map(() => true),
-        catchError(() => of(false)),
-      );
+      // this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyC-_FuLANbZGzSxxh-uOsi8hBKVhNVKaco', 'callback')
+      // .pipe(
+      //   map(() => true),
+      //   catchError(() => of(false)),
+      // );
     }
 
   ngOnInit(): void {
+
     this.title = this.data.title;
     this.notes = this.data.notes;
     this.activityDate = this.data.date;
@@ -281,25 +296,45 @@ export class PatientDataDialogComponent {
     this.bpUpper = this.data.bpUpper;
     this.bpLower = this.data.bpLower;
 
-    this.lat = this.data.position.latitude;
-    this.lng = this.data.position.longitude;
+    // this.lat = this.data.position.latitude;
+    // this.lng = this.data.position.longitude;
+    //data gathering
+    try {
+      this.accX= this.data.accX;
+      this.accY= this.data.accY;
+      this.accZ= this.data.accZ;
+      this.gyroY= this.data.gyroY;
+      this.gyroZ= this.data.gyroZ;
+      this.magX= this.data.magX;
+      this.magY= this.data.magY;
+      this.gyroX= this.data.gyroX;
+      this.magZ= this.data.magZ;
+      this.yaw= this.data.yaw;
+      this.pitch= this.data.pitch;
+      this.roll= this.data.roll;
+      console.log("data get " +this.yaw);
+    } catch (error) {
+      console.log("data get "+error );
+    }
 
-    if (this.chart){
-      this.chart.destroy();
-    } 
+    // if (this.chart){
+    //   this.chart.destroy();
+    // } 
       
-    try {
-      this.chartAll();
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   this.chartAll();
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
-    try {
-      this.center = { lat: this.lat, lng: this.lng };
-      this.markerPositions = { lat: this.lat, lng: this.lng };
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   this.center = { lat: this.lat, lng: this.lng };
+    //   this.markerPositions = { lat: this.lat, lng: this.lng };
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+   
 
   }
 
@@ -311,7 +346,7 @@ export class PatientDataDialogComponent {
   download(){
     const { convertArrayToCSV } = require('convert-array-to-csv');
 
-    const dataArrays = [['no.',this.timeInterval],['temperature',this.temperature],['heartrate',this.heartrate],['oxygen',this.oxygen]];
+    const dataArrays = [['no.',this.timeInterval],['temperature',this.temperature],['heartrate',this.heartrate],['oxygen',this.oxygen], ['yaw', this.yaw], ['pitch', this.pitch], ['roll', this.roll], ['gyroX', this.gyroX], ['gyroY', this.gyroY], ['gyroZ', this.gyroZ], ['accX', this.accX], ['accY', this.accY], ['accZ', this.accZ], ['magX', this.magX], ['magY', this.magY], ['magZ', this.magZ] ];
     
     const csvFromArrayOfArrays = convertArrayToCSV(dataArrays, {
       separator: ','
