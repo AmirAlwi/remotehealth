@@ -78,6 +78,7 @@ export class ActivityListPageComponent implements OnInit {
   bpUpper: number = 0;
   lng: number = 0;
   lat: number = 0;
+  posture: number[];
 
   maxVal: number;
   minVal: number;
@@ -123,6 +124,7 @@ export class ActivityListPageComponent implements OnInit {
     const bpupper = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.upper));
     const bplower = JSON.parse(JSON.stringify(this.sensData.bloodpressure?.lower));
     const geoposition = JSON.parse(JSON.stringify(this.sensData.position));
+    const posture = JSON.parse(JSON.stringify(this.sensData.posture));
 
     this.temperature = temp;
     this.heartRate = heartR;
@@ -131,20 +133,20 @@ export class ActivityListPageComponent implements OnInit {
     this.bpUpper = bpupper;
     this.lat = geoposition.latitude;
     this.lng = geoposition.longitude;
+    this.posture = posture;
 
-    if (this.chart)
-    {
+    if (this.chart) {
       this.chart.destroy();
     }
 
-    console.log("current tab : " +this.selectTab);
-    if(this.selectTab == 0){
+    console.log("current tab : " + this.selectTab);
+    if (this.selectTab == 0) {
       this.chartAll();
-    } else{
+    } else {
       this.dispChart(this.selectTab);
     }
-    
-    
+
+
     try {
       this.center = { lat: this.lat, lng: this.lng };
       this.markerPositions = { lat: this.lat, lng: this.lng };
@@ -155,7 +157,7 @@ export class ActivityListPageComponent implements OnInit {
 
   }
 
-  dispChart(index:number){
+  dispChart(index: number) {
     if (this.chart) this.chart.destroy();
 
     if (index == 1) {
@@ -199,6 +201,12 @@ export class ActivityListPageComponent implements OnInit {
       this.max_thresh = 100;
       try {
         this.chartDisplay(this.oxygen, "oxy");
+      } catch (error) {
+
+      }
+    } else if (index == 4) {
+      try {
+        this.chartDisplay(this.posture, "pos");
       } catch (error) {
 
       }
@@ -307,7 +315,6 @@ export class ActivityListPageComponent implements OnInit {
     });
   }
 
-
   chartAll() {
     const canvas = <HTMLCanvasElement>document.getElementById("all");
 
@@ -383,7 +390,6 @@ export class ActivityListPageComponent implements OnInit {
 
   }
 
-
   adjustRadiusBasedOnData(ctx: any) {
     const v = ctx.parsed.y;
     return v > 37 ? 5
@@ -397,10 +403,6 @@ export class ActivityListPageComponent implements OnInit {
       : v < 36 ? 'rgb(255, 99, 132)'
         : 'rgb(95, 242, 90)'
   }
-
-
-
-
 
 }
 

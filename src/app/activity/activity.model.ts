@@ -20,11 +20,8 @@ export interface sensordata{
     temperature? : number[];
     oximeter?: number[];
     bloodpressure? : bloodpressure;
-    position? : GeoPoint
-    acceleration? : threedimentionalvalue;
-    gyro? : threedimentionalvalue;
-    orientation? : threedimentionalvalue;
-    magnet? : threedimentionalvalue;
+    position? : GeoPoint;
+    posture? : number[];
 }
 
 export interface threedimentionalvalue {
