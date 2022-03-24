@@ -78,7 +78,7 @@ declare var require: any;
 
             </div>
           </mat-tab>
-          <mat-tab label="Heart Rate 🫀">
+          <mat-tab label="Heart Rate 💓">
             <canvas id="heartRate" height="20%" width="100%"></canvas>
             <div style="margin-top: 30px;">
               <div>
@@ -122,6 +122,14 @@ declare var require: any;
                     <google-map height="400px" width="750px" [center]="center" [zoom]="zoom">
                         <map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
                     </google-map>
+                </div>
+            </mat-tab>
+            <mat-tab label="Posture 🕺">
+                <canvas id="pos" height="38%" width="100%"></canvas>
+                <div style="margin-top: 30px;">
+                    <div>
+                        <span>Posture :    1: Stand, 2: Walk, 3: Run, 4: Sit, 5:Lay</span>
+                    </div>
                 </div>
             </mat-tab>
         </mat-tab-group>
@@ -369,9 +377,9 @@ export class PatientDataDialogComponent {
       } catch (error) {
 
       }
-    } else if ($event.index == 4) {
+    } else if ($event.index == 6) {
       try {
-        this.chartDisplay(this.posture, "pos");
+        this.chartPosture();
       } catch (error) {
 
       }
@@ -539,6 +547,66 @@ export class PatientDataDialogComponent {
       },
     });
 
+  }
+
+  chartPosture() {
+
+    const canvas = <HTMLCanvasElement>document.getElementById("pos");
+
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.timeInterval,
+        datasets: [{
+          backgroundColor: 'rgb(95, 242, 90)',
+          borderColor: 'rgb(255, 255, 255)',
+          data: this.posture,
+          tension: 0.3,
+
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              color: "white",
+            },
+            suggestedMin: 5,
+            suggestedMax: 1,
+            beginAtZero: false
+          },
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+
+            grid: {
+              color: "white"
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+
+        },
+        elements: {
+          point: {
+            radius: 0,
+          }
+        },
+      },
+    });
   }
 
 }

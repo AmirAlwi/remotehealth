@@ -204,9 +204,9 @@ export class ActivityListPageComponent implements OnInit {
       } catch (error) {
 
       }
-    } else if (index == 4) {
+    } else if (index == 6) {
       try {
-        this.chartDisplay(this.posture, "pos");
+        this.chartPosture();
       } catch (error) {
 
       }
@@ -403,6 +403,67 @@ export class ActivityListPageComponent implements OnInit {
       : v < 36 ? 'rgb(255, 99, 132)'
         : 'rgb(95, 242, 90)'
   }
+
+  chartPosture() {
+
+    const canvas = <HTMLCanvasElement>document.getElementById("pos");
+
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.timeInterval,
+        datasets: [{
+          backgroundColor: 'rgb(95, 242, 90)',
+          borderColor: 'rgb(255, 255, 255)',
+          data: this.posture,
+          tension: 0.3,
+
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              color: "white",
+            },
+            suggestedMin: 5,
+            suggestedMax: 1,
+            beginAtZero: false
+          },
+          x: {
+            display: true,
+            ticks: {
+              color: "white",
+              autoSkip: true,
+              maxTicksLimit: 21
+            },
+            beginAtZero: true,
+
+            grid: {
+              color: "white"
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          decimation: {
+            enabled: true,
+            algorithm: 'lttb', samples: 1000
+          },
+
+        },
+        elements: {
+          point: {
+            radius: 0,
+          }
+        },
+      },
+    });
+  }
+
 
 }
 
